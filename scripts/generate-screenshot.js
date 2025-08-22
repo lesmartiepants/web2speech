@@ -1,4 +1,5 @@
-const { chromium } = require('playwright');
+import { chromium } from 'playwright';
+import { env } from 'process';
 
 (async () => {
   const browser = await chromium.launch();
@@ -6,7 +7,7 @@ const { chromium } = require('playwright');
   await page.goto('http://localhost:5173');
   // Wait for the main content to be visible to ensure the page has loaded
   await page.waitForSelector('h1', { text: 'Transform any content into beautiful speech' });
-  const path = process.env.SCREENSHOT_PATH || `ui-preview-${Date.now()}.png`;
+  const path = env.SCREENSHOT_PATH || `ui-preview-${Date.now()}.png`;
   await page.screenshot({ path });
   await browser.close();
   console.log(`Screenshot saved to ${path}`);
