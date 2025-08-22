@@ -1,4 +1,4 @@
-import { Download, Eye } from 'lucide-react'
+import { Download, Eye, Music, BookOpen, Zap } from 'lucide-react'
 import { useAppStore } from '../store/useAppStore'
 
 export default function ProcessModeSelection() {
@@ -10,95 +10,124 @@ export default function ProcessModeSelection() {
   }
   
   return (
-    <div className="bg-white/90 backdrop-blur-md rounded-2xl p-6 border border-gray-200 shadow-lg">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Processing Mode</h3>
+    <div className="glass-morphism-strong rounded-3xl p-8 shadow-2xl">
+      <div className="flex items-center space-x-3 mb-8">
+        <div className="w-12 h-12 bg-gradient-to-br from-primary-400 to-primary-600 rounded-2xl flex items-center justify-center shadow-lg">
+          <Zap className="w-6 h-6 text-white" />
+        </div>
+        <div>
+          <h3 className="text-2xl font-bold text-white">Processing Mode</h3>
+          <p className="text-gray-300 text-sm">Choose how you want to experience your content</p>
+        </div>
+      </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <button
           onClick={() => setProcessMode('generate')}
-          className={`p-4 rounded-xl border-2 transition-all text-left ${
+          className={`group relative p-6 rounded-3xl border-2 transition-all duration-300 text-left overflow-hidden ${
             processMode === 'generate'
-              ? 'border-primary-300 bg-primary-50'
-              : 'border-gray-200 bg-gray-50 hover:border-gray-300 hover:bg-gray-100'
+              ? 'border-accent-400/50 bg-accent-500/10 shadow-xl scale-[1.02]'
+              : 'border-white/20 bg-white/5 hover:border-accent-400/30 hover:bg-accent-500/5 hover:scale-[1.01]'
           }`}
         >
-          <div className="flex items-start space-x-3">
-            <div className={`p-2 rounded-lg ${
-              processMode === 'generate' 
-                ? 'bg-primary-100 text-primary-600' 
-                : 'bg-gray-200 text-gray-500'
-            }`}>
-              <Download className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className={`font-medium ${
-                processMode === 'generate' ? 'text-primary-900' : 'text-gray-700'
+          {/* Background animation */}
+          <div className="absolute inset-0 bg-gradient-to-r from-accent-500/0 via-accent-400/5 to-accent-500/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+          
+          <div className="relative z-10">
+            <div className="flex items-start space-x-4">
+              <div className={`p-3 rounded-2xl transition-all duration-300 ${
+                processMode === 'generate' 
+                  ? 'bg-gradient-to-br from-accent-400 to-accent-600 shadow-lg' 
+                  : 'bg-white/10 group-hover:bg-accent-500/20'
               }`}>
-                Generate & Download
-              </h4>
-              <p className={`text-sm mt-1 ${
-                processMode === 'generate' ? 'text-primary-700' : 'text-gray-500'
-              }`}>
-                Create an audio file and download it for offline listening
-              </p>
-              <div className="flex items-center space-x-2 mt-2">
-                <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
-                  MP3
-                </span>
-                <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">
-                  Offline
-                </span>
+                <Download className={`w-6 h-6 ${
+                  processMode === 'generate' ? 'text-white' : 'text-gray-400 group-hover:text-accent-300'
+                }`} />
+              </div>
+              <div className="flex-1">
+                <h4 className={`text-xl font-bold mb-2 ${
+                  processMode === 'generate' ? 'text-white' : 'text-gray-300 group-hover:text-white'
+                }`}>
+                  Generate & Download
+                </h4>
+                <p className={`text-sm leading-relaxed ${
+                  processMode === 'generate' ? 'text-accent-100' : 'text-gray-400 group-hover:text-gray-300'
+                }`}>
+                  Create high-quality audio files powered by AI and download them for offline listening
+                </p>
+                <div className="flex items-center space-x-3 mt-4">
+                  <span className="flex items-center space-x-1 text-xs px-3 py-1 bg-blue-500/20 text-blue-200 rounded-full border border-blue-400/30 font-medium">
+                    <Music className="w-3 h-3" />
+                    <span>MP3</span>
+                  </span>
+                  <span className="flex items-center space-x-1 text-xs px-3 py-1 bg-green-500/20 text-green-200 rounded-full border border-green-400/30 font-medium">
+                    <Download className="w-3 h-3" />
+                    <span>Offline</span>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
+          
+          {processMode === 'generate' && (
+            <div className="absolute top-4 right-4">
+              <div className="w-3 h-3 bg-accent-400 rounded-full animate-pulse"></div>
+            </div>
+          )}
         </button>
         
         <button
           onClick={() => setProcessMode('stream')}
-          className={`p-4 rounded-xl border-2 transition-all text-left ${
+          className={`group relative p-6 rounded-3xl border-2 transition-all duration-300 text-left overflow-hidden ${
             processMode === 'stream'
-              ? 'border-primary-300 bg-primary-50'
-              : 'border-gray-200 bg-gray-50 hover:border-gray-300 hover:bg-gray-100'
+              ? 'border-primary-400/50 bg-primary-500/10 shadow-xl scale-[1.02]'
+              : 'border-white/20 bg-white/5 hover:border-primary-400/30 hover:bg-primary-500/5 hover:scale-[1.01]'
           }`}
         >
-          <div className="flex items-start space-x-3">
-            <div className={`p-2 rounded-lg ${
-              processMode === 'stream' 
-                ? 'bg-primary-100 text-primary-600' 
-                : 'bg-gray-200 text-gray-500'
-            }`}>
-              <Eye className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className={`font-medium ${
-                processMode === 'stream' ? 'text-primary-900' : 'text-gray-700'
+          {/* Background animation */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary-500/0 via-primary-400/5 to-primary-500/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+          
+          <div className="relative z-10">
+            <div className="flex items-start space-x-4">
+              <div className={`p-3 rounded-2xl transition-all duration-300 ${
+                processMode === 'stream' 
+                  ? 'bg-gradient-to-br from-primary-400 to-primary-600 shadow-lg' 
+                  : 'bg-white/10 group-hover:bg-primary-500/20'
               }`}>
-                Read & Listen
-              </h4>
-              <p className={`text-sm mt-1 ${
-                processMode === 'stream' ? 'text-primary-700' : 'text-gray-500'
-              }`}>
-                Beautiful reader view with synchronized audio playback
-              </p>
-              <div className="flex items-center space-x-2 mt-2">
-                <span className="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded-full">
-                  Live
-                </span>
-                <span className="text-xs px-2 py-1 bg-orange-100 text-orange-700 rounded-full">
-                  Interactive
-                </span>
+                <Eye className={`w-6 h-6 ${
+                  processMode === 'stream' ? 'text-white' : 'text-gray-400 group-hover:text-primary-300'
+                }`} />
+              </div>
+              <div className="flex-1">
+                <h4 className={`text-xl font-bold mb-2 ${
+                  processMode === 'stream' ? 'text-white' : 'text-gray-300 group-hover:text-white'
+                }`}>
+                  Read & Listen
+                </h4>
+                <p className={`text-sm leading-relaxed ${
+                  processMode === 'stream' ? 'text-primary-100' : 'text-gray-400 group-hover:text-gray-300'
+                }`}>
+                  Immersive reader view with real-time synchronized audio playback and word highlighting
+                </p>
+                <div className="flex items-center space-x-3 mt-4">
+                  <span className="flex items-center space-x-1 text-xs px-3 py-1 bg-purple-500/20 text-purple-200 rounded-full border border-purple-400/30 font-medium">
+                    <Zap className="w-3 h-3" />
+                    <span>Live</span>
+                  </span>
+                  <span className="flex items-center space-x-1 text-xs px-3 py-1 bg-orange-500/20 text-orange-200 rounded-full border border-orange-400/30 font-medium">
+                    <BookOpen className="w-3 h-3" />
+                    <span>Interactive</span>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-        </button>
-      </div>
-      
-      <div className="mt-6 flex justify-center">
-        <button
-          disabled={!hasContent}
-          className="bg-primary-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          {processMode === 'generate' ? 'Generate Audio File' : 'Start Reading Experience'}
+          
+          {processMode === 'stream' && (
+            <div className="absolute top-4 right-4">
+              <div className="w-3 h-3 bg-primary-400 rounded-full animate-pulse"></div>
+            </div>
+          )}
         </button>
       </div>
     </div>

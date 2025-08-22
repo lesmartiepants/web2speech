@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Play, Pause, SkipForward, SkipBack, Settings, X } from 'lucide-react'
+import { Play, Pause, SkipForward, SkipBack, Settings, X, Sparkles } from 'lucide-react'
 import { useAppStore } from '../store/useAppStore'
 import HuggingFaceTTSService from '../services/huggingface'
 
@@ -297,12 +297,12 @@ export default function ReaderView() {
           return (
             <span
               key={index}
-              className={`transition-all duration-200 ${
+              className={`transition-all duration-300 ${
                 isCurrentWord
-                  ? 'bg-primary-200 text-primary-900 font-semibold px-1 rounded'
+                  ? 'bg-gradient-to-r from-accent-400/30 to-primary-400/30 text-white font-bold px-2 py-1 rounded-lg shadow-lg border border-accent-400/50'
                   : isReadWord
                   ? 'text-gray-500'
-                  : 'text-gray-900'
+                  : 'text-gray-200'
               }`}
             >
               {word}{' '}
@@ -316,36 +316,41 @@ export default function ReaderView() {
   if (!showReaderView) return null
   
   return (
-    <div className="fixed inset-0 bg-white z-50 flex flex-col">
+    <div className="fixed inset-0 bg-gradient-to-br from-dark-900 via-dark-800 to-primary-900/20 z-50 flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b bg-white/90 backdrop-blur-md">
-        <div className="flex items-center space-x-3">
+      <div className="flex items-center justify-between p-6 border-b border-white/20 glass-morphism-strong">
+        <div className="flex items-center space-x-4">
           <button
             onClick={() => setShowReaderView(false)}
-            className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+            className="p-3 text-gray-400 hover:text-white transition-all duration-300 rounded-xl hover:bg-white/10 hover:scale-110"
           >
-            <X className="w-5 h-5" />
+            <X className="w-6 h-6" />
           </button>
-          <h2 className="text-lg font-semibold text-gray-900">Reader View</h2>
-          <span className="text-sm text-gray-500">
-            {ttsEngine === 'huggingface' ? '🤖 Kokoro-82M' : '🔊 Browser TTS'}
-          </span>
+          <div>
+            <h2 className="text-2xl font-bold text-white">Reader View</h2>
+            <div className="flex items-center space-x-2 mt-1">
+              <span className="text-sm text-gray-300">
+                {ttsEngine === 'huggingface' ? '🤖 Kokoro-82M AI' : '🔊 Browser TTS'}
+              </span>
+              <div className="w-2 h-2 bg-accent-400 rounded-full animate-pulse"></div>
+            </div>
+          </div>
         </div>
         
         <button
           onClick={() => setShowSettings(!showSettings)}
-          className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+          className="p-3 text-gray-400 hover:text-white transition-all duration-300 rounded-xl hover:bg-white/10 hover:scale-110 group"
         >
-          <Settings className="w-5 h-5" />
+          <Settings className="w-6 h-6 group-hover:rotate-90 transition-transform duration-300" />
         </button>
       </div>
       
       {/* Settings Panel */}
       {showSettings && ttsEngine === 'webspeech' && (
-        <div className="p-4 bg-gray-50 border-b space-y-4">
-          <div className="flex items-center space-x-6">
-            <div className="flex items-center space-x-2">
-              <label className="text-sm font-medium text-gray-700">Speed:</label>
+        <div className="p-6 glass-morphism border-b border-white/20 space-y-6">
+          <div className="flex items-center justify-center space-x-12">
+            <div className="flex items-center space-x-4">
+              <label className="text-sm font-semibold text-white">Speed:</label>
               <input
                 type="range"
                 min="0.5"
@@ -353,13 +358,13 @@ export default function ReaderView() {
                 step="0.1"
                 value={rate}
                 onChange={(e) => setRate(parseFloat(e.target.value))}
-                className="w-20"
+                className="w-32 h-2 bg-white/20 rounded-full appearance-none cursor-pointer slider"
               />
-              <span className="text-sm text-gray-600">{rate}x</span>
+              <span className="text-sm text-accent-300 font-medium min-w-[3rem]">{rate}x</span>
             </div>
             
-            <div className="flex items-center space-x-2">
-              <label className="text-sm font-medium text-gray-700">Pitch:</label>
+            <div className="flex items-center space-x-4">
+              <label className="text-sm font-semibold text-white">Pitch:</label>
               <input
                 type="range"
                 min="0.5"
@@ -367,70 +372,79 @@ export default function ReaderView() {
                 step="0.1"
                 value={pitch}
                 onChange={(e) => setPitch(parseFloat(e.target.value))}
-                className="w-20"
+                className="w-32 h-2 bg-white/20 rounded-full appearance-none cursor-pointer slider"
               />
-              <span className="text-sm text-gray-600">{pitch}</span>
+              <span className="text-sm text-accent-300 font-medium min-w-[3rem]">{pitch}</span>
             </div>
           </div>
         </div>
       )}
       
       {showSettings && ttsEngine === 'huggingface' && (
-        <div className="p-4 bg-gray-50 border-b">
-          <p className="text-sm text-gray-600">
-            Kokoro-82M TTS settings are controlled at the voice level. 
-            Speech rate and pitch adjustments are built into the AI model.
-          </p>
+        <div className="p-6 glass-morphism border-b border-white/20">
+          <div className="flex items-center space-x-3 justify-center">
+            <div className="w-8 h-8 bg-gradient-to-br from-accent-400 to-accent-600 rounded-xl flex items-center justify-center shadow-lg">
+              <Sparkles className="w-4 h-4 text-white" />
+            </div>
+            <p className="text-accent-200 font-medium">
+              Kokoro-82M TTS settings are controlled at the voice level with built-in natural speech optimization.
+            </p>
+          </div>
         </div>
       )}
       
       {/* Content */}
-      <div className="flex-1 overflow-auto p-6">
-        <div className="max-w-4xl mx-auto">
-          {renderContent()}
+      <div className="flex-1 overflow-auto p-8">
+        <div className="max-w-5xl mx-auto">
+          <div className="glass-morphism rounded-3xl p-8 shadow-2xl">
+            {renderContent()}
+          </div>
         </div>
       </div>
       
       {/* Audio Controls */}
-      <div className="bg-white border-t p-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-center space-x-6">
+      <div className="glass-morphism-strong border-t border-white/20 p-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-center justify-center space-x-8 mb-6">
             <button
               onClick={skipBack}
-              className="p-3 text-gray-600 hover:text-primary-600 transition-colors"
+              className="p-4 text-gray-400 hover:text-primary-400 transition-all duration-300 rounded-2xl hover:bg-white/10 hover:scale-110 group"
             >
-              <SkipBack className="w-6 h-6" />
+              <SkipBack className="w-8 h-8 group-hover:scale-110 transition-transform" />
             </button>
             
             <button
               onClick={isPlaying ? pause : speak}
               disabled={words.length === 0}
-              className="p-4 bg-primary-600 text-white rounded-full hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="relative p-6 bg-gradient-to-r from-primary-500 via-primary-600 to-accent-500 text-white rounded-3xl hover:from-primary-600 hover:via-primary-700 hover:to-accent-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl hover:shadow-accent-500/25 transform hover:scale-105 group"
             >
               {isPlaying ? (
-                <Pause className="w-8 h-8" />
+                <Pause className="w-10 h-10 group-hover:scale-110 transition-transform" />
               ) : (
-                <Play className="w-8 h-8" />
+                <Play className="w-10 h-10 group-hover:scale-110 transition-transform" />
               )}
+              <div className="absolute inset-0 bg-gradient-to-r from-primary-600/0 via-white/10 to-primary-600/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
             </button>
             
             <button
               onClick={skipForward}
-              className="p-3 text-gray-600 hover:text-primary-600 transition-colors"
+              className="p-4 text-gray-400 hover:text-primary-400 transition-all duration-300 rounded-2xl hover:bg-white/10 hover:scale-110 group"
             >
-              <SkipForward className="w-6 h-6" />
+              <SkipForward className="w-8 h-8 group-hover:scale-110 transition-transform" />
             </button>
           </div>
           
-          <div className="mt-4 flex items-center justify-center space-x-4 text-sm text-gray-600">
-            <span>{Math.round((currentWordIndex / words.length) * 100)}% complete</span>
-            <div className="w-32 h-2 bg-gray-200 rounded-full">
+          <div className="flex items-center justify-center space-x-6 text-sm">
+            <span className="text-accent-300 font-semibold">
+              {Math.round((currentWordIndex / words.length) * 100)}% complete
+            </span>
+            <div className="w-48 h-3 bg-dark-700/50 rounded-full overflow-hidden">
               <div 
-                className="h-2 bg-primary-600 rounded-full transition-all duration-300"
+                className="h-full bg-gradient-to-r from-primary-400 to-accent-500 rounded-full transition-all duration-500 shadow-lg"
                 style={{ width: `${(currentWordIndex / words.length) * 100}%` }}
               />
             </div>
-            <span>{words.length} words</span>
+            <span className="text-gray-300 font-medium">{words.length} words</span>
           </div>
         </div>
       </div>
