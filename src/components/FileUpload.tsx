@@ -13,7 +13,7 @@ export default function FileUpload() {
     isLoading 
   } = useAppStore()
   
-  const extractTextFromFile = async (file: File) => {
+  const extractTextFromFile = useCallback(async (file: File) => {
     setIsLoading(true)
     setError(null)
     
@@ -45,11 +45,11 @@ export default function FileUpload() {
       }
       
       setIsLoading(false)
-    } catch (error) {
+    } catch {
       setError('Failed to extract text from file. Please try a different file.')
       setIsLoading(false)
     }
-  }
+  }, [setIsLoading, setError, setExtractedContent])
   
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0]
@@ -57,7 +57,7 @@ export default function FileUpload() {
       setSelectedFile(file)
       extractTextFromFile(file)
     }
-  }, [setSelectedFile])
+  }, [setSelectedFile, extractTextFromFile])
   
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
