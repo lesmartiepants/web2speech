@@ -1,56 +1,60 @@
 # Coding Agent Guidelines
 
-This document outlines the rules and best practices for AI coding agents working on this repository. These guidelines are based on GitHub Copilot documentation and community-driven best practices, designed to work with any coding assistant including Jules, GitHub Copilot, and other AI development tools.
+This document outlines the engineering standards and best practices for coding agents working on this repository. Follow these guidelines to maintain the highest quality codebase and development practices of a senior software engineer and architect.
 
-## General Principles
+## Core Engineering Principles
 
-*   **Proactive Problem Solving:** AI agents should strive to solve problems autonomously, but should ask for clarification when the user's request is ambiguous, when stuck after trying multiple approaches, or when a decision would significantly alter the scope of the original request.
-*   **Verify Work:** After every action that modifies the state of the codebase, agents should use read-only tools (like `read_file`, `ls`, or `grep`) to confirm that the action was executed successfully and had the intended effect.
-*   **Edit Source, Not Artifacts:** If an agent determines a file is a build artifact (e.g., located in a `dist`, `build`, or `target` directory), it should not edit it directly. Instead, trace the code back to its source and make changes there.
-*   **Proactive Testing:** For any code change, agents should attempt to find and run relevant tests to ensure changes are correct and have not caused regressions. When practical, practice test-driven development by writing a failing test first.
+*   **Mindful Development:** Think before you code. Analyze the problem thoroughly, understand the existing architecture, and consider the long-term implications of every change. Always ask yourself: "Is this the simplest solution that solves the problem?"
+*   **Minimal Changes:** Make the smallest possible change to achieve the desired outcome. Surgical precision is preferred over broad refactoring unless absolutely necessary. Every line of code added or modified should serve a clear purpose.
+*   **Pattern Recognition and Development:** Identify and leverage existing patterns in the codebase. When creating new functionality, establish clear, consistent patterns that other developers can follow. Document architectural decisions that establish new patterns.
+*   **Verification First:** After every modification, verify the change works as intended using appropriate tools and tests. Source code is the single source of truth - always edit source files, never build artifacts.
 
-## Task Scoping
+## Software Engineering Standards
 
-*   **Clear and Well-Scoped Tasks:** AI agents work best when assigned clear, well-scoped tasks. An ideal task includes:
-    *   A clear description of the problem to be solved or the work required.
-    *   Complete acceptance criteria on what a good solution looks like (e.g., should there be unit tests?).
-    *   Directions about which files need to be changed.
+*   **DRY (Don't Repeat Yourself):** Eliminate code duplication through abstraction, shared utilities, and reusable components. If you find yourself writing similar code twice, extract it into a reusable function or module.
+*   **SOLID Principles:** 
+    - Single Responsibility: Each function/class should have one reason to change
+    - Open/Closed: Open for extension, closed for modification
+    - Liskov Substitution: Objects should be replaceable with instances of their subtypes
+    - Interface Segregation: Depend on abstractions, not concretions
+    - Dependency Inversion: High-level modules should not depend on low-level modules
+*   **Code Quality:** Write self-documenting code with clear variable names, function names, and structure. Comments should explain "why", not "what". Maintain consistent formatting and style throughout the codebase.
+*   **Test-Driven Development:** When practical, write failing tests before implementing features. Ensure all changes have appropriate test coverage. Run tests early and often to prevent regressions.
 
-*   **Task Types:** AI agents are well-suited for tasks such as fixing bugs, altering user interface features, improving test coverage, updating documentation, improving accessibility, and addressing technical debt. They may struggle with complex, broadly scoped tasks that require cross-repository knowledge, deep domain knowledge, or substantial business logic.
+## Architecture and Design
 
-## Providing Context
+*   **Understand Before Modifying:** Before making any changes, thoroughly understand the existing architecture, dependencies, and data flow. Read related code, understand the context, and identify potential side effects.
+*   **Consistency is King:** Follow existing code patterns, naming conventions, and architectural decisions. When in doubt, mirror the style and structure of similar existing code.
+*   **Performance Considerations:** Consider the performance impact of every change. Avoid premature optimization, but be mindful of algorithmic complexity, memory usage, and network calls.
+*   **Security First:** Always consider security implications. Validate inputs, sanitize outputs, follow principle of least privilege, and never commit sensitive information.
 
-*   **Custom Instructions:** AI agents should look for project-specific instructions in common locations such as:
-    - `.github/copilot-instructions.md` for GitHub Copilot specific instructions
-    - `AGENTS.md` (this file) for general agent guidelines  
-    - Project README.md for overall project context and setup instructions
-    - If agent-specific instruction files don't exist, agents may create them when beneficial for the project.
-*   **Path-Specific Instructions:** Look for and use path-specific instructions in the `.github/instructions/` directory to understand how to work with specific file types.
+## Code Organization and Structure
 
-## Iterating on Work
+*   **Clear Separation of Concerns:** Organize code into logical modules with clear boundaries. Business logic, data access, and presentation layers should be clearly separated.
+*   **Meaningful Abstractions:** Create abstractions that hide complexity while revealing intent. Interfaces and abstract classes should represent real-world concepts or clear architectural boundaries.
+*   **Error Handling:** Implement robust error handling with meaningful error messages. Fail fast when possible, and provide clear recovery paths when failures are expected.
+*   **Documentation Standards:** Maintain up-to-date documentation for public APIs, complex algorithms, and architectural decisions. Code should be self-explaining, but context and reasoning should be documented.
 
-*   **Feedback and Iteration:** AI agents should understand that work may not be perfect on the first try. They are designed to iterate on work based on user feedback. Users can mention agents in pull request comments to request changes.
-*   **Batching Comments:** To ensure that agents address all feedback in a single pass, it is best for users to batch comments by creating a review, rather than leaving individual comments.
+## Development Workflow
 
-## Environment Setup
+*   **Environment Setup:** Understand the project setup requirements by examining:
+    - `package.json` for dependencies and scripts
+    - Project README.md for environment setup instructions  
+    - Configuration files for build tools, linters, and test frameworks
+    - Create setup documentation when gaps exist to help future contributors
+*   **Incremental Development:** Make small, testable changes. Each commit should represent a logical unit of work that can be reviewed and tested independently.
+*   **Feedback Integration:** Approach feedback as an opportunity to improve code quality. Address feedback systematically and comprehensively, ensuring all concerns are resolved before considering the work complete.
 
-*   **Pre-installing Dependencies:** To improve performance, agents should look for setup files such as:
-    - `copilot-setup-steps.yml` for GitHub Copilot environment preparation
-    - `package.json` scripts for project-specific setup commands
-    - Project README.md for environment setup instructions
-    - If setup files don't exist, agents may create them when beneficial for the project workflow.
+## Project Standards
 
-## Specific Rules
+*   **Configuration Consistency:** Follow established configuration patterns for linting, formatting, building, and testing. Maintain consistency across all configuration files.
+*   **Dependency Management:** Be conservative with new dependencies. Evaluate alternatives, consider bundle size impact, and ensure dependencies are actively maintained and secure.
+*   **Version Control:** Write clear, descriptive commit messages following the project's conventions. Group related changes into atomic commits that tell a coherent story.
+*   **Code Review Readiness:** Structure changes to facilitate easy code review. Separate refactoring from feature work, include tests with implementation, and provide clear explanations for complex changes.
 
-*   **Markdown for Documentation:** Always use Markdown for documentation and README files.
-*   **README.md Structure:** Maintain the existing structure of the README.md file.
-*   **Agent Instructions:** Keep agent-specific instructions organized and well-documented. Update relevant documentation when adding new guidelines.
-*   **Best Practices:** Maintain consistency in capitalization and punctuation throughout the repository. When creating documentation, use clear and descriptive language.
-*   **File Organization:** Follow the existing project structure and maintain consistency with established patterns.
+## Commit Message Standards
 
-## Commit Message Guidelines
-
-*   **Conventional Commits:** AI agents should use the Conventional Commits specification to generate commit messages. The commit message should be structured as follows:
+*   **Conventional Commits:** Use the Conventional Commits specification for all commit messages:
     ```
     <type>[optional scope]: <description>
 
@@ -58,10 +62,16 @@ This document outlines the rules and best practices for AI coding agents working
 
     [optional footer(s)]
     ```
-*   **Types:** The following types are allowed:
-    *   `fix`: a commit of the type fix patches a bug in your codebase (this correlates with PATCH in Semantic Versioning).
-    *   `feat`: a commit of the type feat introduces a new feature to the codebase (this correlates with MINOR in Semantic Versioning).
-    *   `BREAKING CHANGE`: a commit that has a footer BREAKING CHANGE:, or appends a ! after the type/scope, introduces a breaking API change (correlating with MAJOR in Semantic Versioning). A BREAKING CHANGE can be part of commits of any type.
-    *   other types: `build`, `chore`, `ci`, `docs`, `style`, `refactor`, `perf`, `test`.
-*   **Breaking Changes:** Breaking changes MUST be indicated in the type/scope prefix of a commit, or as an entry in the footer.
-*   **Case Sensitivity:** The units of information that make up Conventional Commits MUST NOT be treated as case sensitive by implementors, with the exception of BREAKING CHANGE which MUST be uppercase.
+*   **Commit Types:** Use appropriate types that clearly communicate the nature of the change:
+    *   `feat`: New features or functionality
+    *   `fix`: Bug fixes and corrections
+    *   `docs`: Documentation changes only
+    *   `style`: Code style changes (formatting, semicolons, etc.)
+    *   `refactor`: Code changes that neither fix bugs nor add features
+    *   `perf`: Performance improvements
+    *   `test`: Adding or correcting tests
+    *   `build`: Build system or external dependency changes
+    *   `ci`: Continuous integration configuration changes
+    *   `chore`: Other changes that don't modify src or test files
+*   **Breaking Changes:** Clearly indicate breaking changes with `!` after the type/scope or in the footer with `BREAKING CHANGE:`
+*   **Descriptive Messages:** Write commit messages that clearly explain both what changed and why, enabling easy understanding during code review and debugging.
