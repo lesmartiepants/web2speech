@@ -3,25 +3,65 @@ import Header from './components/Header'
 import InputToggle from './components/InputToggle'
 import UrlInput from './components/UrlInput'
 import FileUpload from './components/FileUpload'
+import TTSEngineSelection from './components/TTSEngineSelection'
 import VoiceSelection from './components/VoiceSelection'
 import ProcessModeSelection from './components/ProcessModeSelection'
 import ReaderView from './components/ReaderView'
 import ErrorDisplay from './components/ErrorDisplay'
+import HuggingFaceTTSService from './services/huggingface'
 
 function App() {
   const { 
     inputMode, 
     extractedContent, 
     processMode, 
-    setShowReaderView
+    ttsEngine,
+    selectedVoice,
+    huggingFaceApiKey,
+    setShowReaderView,
+    setError
   } = useAppStore()
 
-  const handleStartReading = () => {
+  const handleStartReading = async () => {
     if (processMode === 'stream' && extractedContent.trim()) {
       setShowReaderView(true)
     } else if (processMode === 'generate' && extractedContent.trim()) {
-      // In a real app, this would generate and download the audio file
-      alert('Audio generation would start here. This would use services like:\n\n- ElevenLabs API for high-quality TTS\n- Azure Cognitive Services\n- Google Cloud Text-to-Speech\n- Local TTS with better models')
+      try {
+        if (ttsEngine === 'huggingface' && huggingFaceApiKey && selectedVoice) {
+          const service = new HuggingFaceTTSService({
+            apiKey: huggingFaceApiKey,
+            model: 'hexgrad/Kokoro-82M'
+          })
+          
+          const result = await service.generateAudio({
+            text: extractedContent,
+            voice: selectedVoice.id.replace('huggingface-', '')
+          })
+          
+          // Create download link
+          const link = document.createElement('a')
+          link.href = result.audioUrl
+          link.download = `web2speech-audio-${Date.now()}.wav`
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+          
+          // Cleanup
+          setTimeout(() => {
+            URL.revokeObjectURL(result.audioUrl)
+          }, 1000)
+        } else {
+          // Fallback message for browser TTS or missing configuration
+          alert(`Audio generation is available with Hugging Face Kokoro-82M TTS. 
+          
+Current setup: ${ttsEngine === 'webspeech' ? 'Browser TTS (streaming only)' : 'Hugging Face TTS'}
+${ttsEngine === 'huggingface' && !huggingFaceApiKey ? 'Please configure your API key to use audio generation.' : ''}
+
+For high-quality downloadable audio files, select Hugging Face Kokoro-82M as your TTS engine.`)
+        }
+      } catch (error) {
+        setError(error instanceof Error ? error.message : 'Audio generation failed')
+      }
     }
   }
 
@@ -35,7 +75,7 @@ function App() {
             Transform any content into beautiful speech
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Paste a URL or upload a file to get started. Choose your preferred voice and enjoy a beautiful reading experience with synchronized audio.
+            Paste a URL or upload a file to get started. Choose your preferred TTS engine and voice, then enjoy a beautiful reading experience with synchronized audio.
           </p>
         </div>
 
@@ -47,6 +87,8 @@ function App() {
         
         {extractedContent && (
           <>
+            <TTSEngineSelection />
+            
             <VoiceSelection />
             
             <div className="bg-white/90 backdrop-blur-md rounded-2xl p-6 border border-gray-200 shadow-lg">
@@ -70,7 +112,9 @@ function App() {
                   onClick={handleStartReading}
                   className="bg-gradient-to-r from-primary-600 to-primary-700 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:from-primary-700 hover:to-primary-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transform hover:scale-105 transition-all shadow-lg"
                 >
-                  {processMode === 'generate' ? '🎵 Generate Audio File' : '📖 Start Reading Experience'}
+                  {processMode === 'generate' ? (
+                    ttsEngine === 'huggingface' ? '🎵 Generate Audio File (Kokoro-82M)' : '🎵 Generate Audio File'
+                  ) : '📖 Start Reading Experience'}
                 </button>
               </div>
             )}
@@ -88,7 +132,7 @@ function App() {
               Built with ❤️ for accessibility and beautiful reading experiences
             </p>
             <p className="text-sm">
-              Powered by modern web technologies: React, TypeScript, Tailwind CSS, Web Speech API
+              Powered by modern web technologies: React, TypeScript, Tailwind CSS, Web Speech API, Hugging Face Kokoro-82M
             </p>
           </div>
         </div>

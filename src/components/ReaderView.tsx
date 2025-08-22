@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Play, Pause, SkipForward, SkipBack, Settings, X } from 'lucide-react'
 import { useAppStore } from '../store/useAppStore'
+import HuggingFaceTTSService from '../services/huggingface'
 
 export default function ReaderView() {
   const {
@@ -9,16 +10,23 @@ export default function ReaderView() {
     isPlaying,
     setIsPlaying,
     setCurrentUtterance,
+    currentAudio,
+    setCurrentAudio,
     showReaderView,
     setShowReaderView,
     currentWordIndex,
-    setCurrentWordIndex
+    setCurrentWordIndex,
+    ttsEngine,
+    huggingFaceApiKey,
+    setError
   } = useAppStore()
   
   const [words, setWords] = useState<string[]>([])
   const [rate, setRate] = useState(1.0)
   const [pitch, setPitch] = useState(1.0)
   const [showSettings, setShowSettings] = useState(false)
+  const [audioChunks, setAudioChunks] = useState<{ audioUrl: string; startIndex: number; endIndex: number }[]>([])
+  const [currentChunkIndex, setCurrentChunkIndex] = useState(0)
   
   useEffect(() => {
     if (extractedContent) {
@@ -29,9 +37,9 @@ export default function ReaderView() {
       setWords(wordList)
     }
   }, [extractedContent])
-  
-  const speak = () => {
-    if (!selectedVoice || words.length === 0) return
+
+  const speakWithWebSpeech = () => {
+    if (!selectedVoice?.nativeVoice || words.length === 0) return
     
     // Stop any current speech
     speechSynthesis.cancel()
@@ -39,7 +47,7 @@ export default function ReaderView() {
     const textToSpeak = words.slice(currentWordIndex).join(' ')
     const utterance = new SpeechSynthesisUtterance(textToSpeak)
     
-    utterance.voice = selectedVoice
+    utterance.voice = selectedVoice.nativeVoice
     utterance.rate = rate
     utterance.pitch = pitch
     utterance.volume = 0.8
@@ -81,11 +89,182 @@ export default function ReaderView() {
     setCurrentUtterance(utterance)
     speechSynthesis.speak(utterance)
   }
+
+  const speakWithHuggingFace = async () => {
+    if (!selectedVoice || !huggingFaceApiKey || words.length === 0) return
+    
+    try {
+      setIsPlaying(true)
+      const service = new HuggingFaceTTSService({
+        apiKey: huggingFaceApiKey,
+        model: 'hexgrad/Kokoro-82M'
+      })
+      
+      // For long texts, break into chunks
+      const textToSpeak = words.slice(currentWordIndex).join(' ')
+      const maxChunkSize = 500 // Adjust based on what works well with Kokoro
+      
+      if (textToSpeak.length > maxChunkSize) {
+        // Generate audio in chunks
+        const chunks: string[] = []
+        let currentChunk = ''
+        let startWordIndex = currentWordIndex
+        
+        for (let i = currentWordIndex; i < words.length; i++) {
+          const word = words[i]
+          if ((currentChunk + ' ' + word).length > maxChunkSize && currentChunk) {
+            chunks.push(currentChunk.trim())
+            currentChunk = word
+            continue
+          }
+          currentChunk += (currentChunk ? ' ' : '') + word
+        }
+        if (currentChunk.trim()) {
+          chunks.push(currentChunk.trim())
+        }
+        
+        const newAudioChunks: { audioUrl: string; startIndex: number; endIndex: number }[] = []
+        
+        for (let i = 0; i < chunks.length; i++) {
+          const result = await service.generateAudio({
+            text: chunks[i],
+            voice: selectedVoice.id.replace('huggingface-', '')
+          })
+          
+          const wordsInChunk = chunks[i].split(/\s+/).length
+          newAudioChunks.push({
+            audioUrl: result.audioUrl,
+            startIndex: startWordIndex,
+            endIndex: startWordIndex + wordsInChunk - 1
+          })
+          startWordIndex += wordsInChunk
+        }
+        
+        setAudioChunks(newAudioChunks)
+        setCurrentChunkIndex(0)
+        playAudioChunk(newAudioChunks[0])
+      } else {
+        // Single chunk
+        const result = await service.generateAudio({
+          text: textToSpeak,
+          voice: selectedVoice.id.replace('huggingface-', '')
+        })
+        
+        const audio = new Audio(result.audioUrl)
+        setCurrentAudio(audio)
+        
+        // Simple word tracking for single chunk
+        const totalWords = words.length - currentWordIndex
+        const duration = result.duration * 1000 // Convert to milliseconds
+        const wordInterval = duration / totalWords
+        
+        let wordTracker = currentWordIndex
+        const trackingInterval = setInterval(() => {
+          if (!isPlaying || wordTracker >= words.length) {
+            clearInterval(trackingInterval)
+            return
+          }
+          wordTracker++
+          setCurrentWordIndex(wordTracker)
+        }, wordInterval)
+        
+        audio.onended = () => {
+          clearInterval(trackingInterval)
+          setIsPlaying(false)
+          setCurrentAudio(null)
+          setCurrentWordIndex(0)
+          URL.revokeObjectURL(result.audioUrl)
+        }
+        
+        audio.onerror = () => {
+          clearInterval(trackingInterval)
+          setIsPlaying(false)
+          setCurrentAudio(null)
+          setError('Audio playback failed')
+        }
+        
+        await audio.play()
+      }
+    } catch (error) {
+      console.error('Hugging Face TTS failed:', error)
+      setError(error instanceof Error ? error.message : 'TTS generation failed')
+      setIsPlaying(false)
+    }
+  }
+
+  const playAudioChunk = async (chunk: typeof audioChunks[0]) => {
+    const audio = new Audio(chunk.audioUrl)
+    setCurrentAudio(audio)
+    
+    const wordsInChunk = chunk.endIndex - chunk.startIndex + 1
+    const estimatedDuration = (wordsInChunk / 150) * 60 * 1000 // 150 words per minute in ms
+    const wordInterval = estimatedDuration / wordsInChunk
+    
+    let wordTracker = chunk.startIndex
+    const trackingInterval = setInterval(() => {
+      if (!isPlaying || wordTracker > chunk.endIndex) {
+        clearInterval(trackingInterval)
+        return
+      }
+      setCurrentWordIndex(wordTracker)
+      wordTracker++
+    }, wordInterval)
+    
+    audio.onended = () => {
+      clearInterval(trackingInterval)
+      
+      // Play next chunk if available
+      if (currentChunkIndex + 1 < audioChunks.length) {
+        const nextIndex = currentChunkIndex + 1
+        setCurrentChunkIndex(nextIndex)
+        playAudioChunk(audioChunks[nextIndex])
+      } else {
+        // All chunks finished
+        setIsPlaying(false)
+        setCurrentAudio(null)
+        setCurrentWordIndex(0)
+        setAudioChunks([])
+        setCurrentChunkIndex(0)
+      }
+      
+      URL.revokeObjectURL(chunk.audioUrl)
+    }
+    
+    audio.onerror = () => {
+      clearInterval(trackingInterval)
+      setIsPlaying(false)
+      setCurrentAudio(null)
+      setError('Audio playback failed')
+    }
+    
+    await audio.play()
+  }
+  
+  const speak = async () => {
+    if (!selectedVoice || words.length === 0) return
+    
+    if (ttsEngine === 'webspeech') {
+      speakWithWebSpeech()
+    } else if (ttsEngine === 'huggingface') {
+      await speakWithHuggingFace()
+    }
+  }
   
   const pause = () => {
-    speechSynthesis.cancel()
+    if (ttsEngine === 'webspeech') {
+      speechSynthesis.cancel()
+    } else if (currentAudio) {
+      currentAudio.pause()
+      setCurrentAudio(null)
+    }
+    
     setIsPlaying(false)
     setCurrentUtterance(null)
+    
+    // Cleanup audio chunks
+    audioChunks.forEach(chunk => URL.revokeObjectURL(chunk.audioUrl))
+    setAudioChunks([])
+    setCurrentChunkIndex(0)
   }
   
   const skipBack = () => {
@@ -148,6 +327,9 @@ export default function ReaderView() {
             <X className="w-5 h-5" />
           </button>
           <h2 className="text-lg font-semibold text-gray-900">Reader View</h2>
+          <span className="text-sm text-gray-500">
+            {ttsEngine === 'huggingface' ? '🤖 Kokoro-82M' : '🔊 Browser TTS'}
+          </span>
         </div>
         
         <button
@@ -159,7 +341,7 @@ export default function ReaderView() {
       </div>
       
       {/* Settings Panel */}
-      {showSettings && (
+      {showSettings && ttsEngine === 'webspeech' && (
         <div className="p-4 bg-gray-50 border-b space-y-4">
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-2">
@@ -190,6 +372,15 @@ export default function ReaderView() {
               <span className="text-sm text-gray-600">{pitch}</span>
             </div>
           </div>
+        </div>
+      )}
+      
+      {showSettings && ttsEngine === 'huggingface' && (
+        <div className="p-4 bg-gray-50 border-b">
+          <p className="text-sm text-gray-600">
+            Kokoro-82M TTS settings are controlled at the voice level. 
+            Speech rate and pitch adjustments are built into the AI model.
+          </p>
         </div>
       )}
       

@@ -25,7 +25,9 @@ A beautiful, mobile-friendly Progressive Web App that transforms web content and
 - **Reading Statistics**: Word count and estimated reading time
 
 ### 🎙️ Advanced Voice Features
-- **Multiple Voices**: Choose from all available system TTS voices
+- **Multiple TTS Engines**: Choose between Web Speech API and Hugging Face Kokoro-82M
+- **High-Quality AI Voices**: Premium neural TTS with natural-sounding speech
+- **Multiple Voices**: Choose from all available system TTS voices plus AI voices
 - **Language Support**: Automatic language detection with flag indicators
 - **Voice Testing**: Test voices before starting playback
 - **Local/Cloud Voices**: Clear indicators for voice types
@@ -62,8 +64,26 @@ A beautiful, mobile-friendly Progressive Web App that transforms web content and
 
 ### Speech Technology
 - **Web Speech API** for native browser TTS
+- **Hugging Face Kokoro-82M** for high-quality AI-powered text-to-speech
 - **Real-time word tracking** during playback
 - **Extensible architecture** for external TTS services
+
+## 🔧 Configuration
+
+### Hugging Face TTS Setup
+
+To use the premium Hugging Face Kokoro-82M TTS engine:
+
+1. **Get API Key**: Visit [Hugging Face Settings](https://huggingface.co/settings/tokens) to create an API token
+2. **Configure in App**: Select "Hugging Face Kokoro-82M" from the TTS Engine dropdown
+3. **Enter API Key**: Enter your API key when prompted
+4. **Enjoy Premium Audio**: Experience high-quality neural text-to-speech
+
+The API key is stored securely in your browser's local storage and is only used to communicate with Hugging Face's inference API.
+
+### Voice Selection
+- **Browser TTS**: Uses your system's built-in voices (free, works offline)
+- **Kokoro-82M**: Premium AI voices with natural intonation (requires API key)
 
 ## 🛠️ Development Setup
 
@@ -202,6 +222,6 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 
 ---
 
-**Built with ❤️ for accessibility and beautiful reading experiences**
+Built with ❤️ for accessibility and beautiful reading experiences
 
-*Powered by modern web technologies: React, TypeScript, Tailwind CSS, Web Speech API*
+*Powered by modern web technologies: React, TypeScript, Tailwind CSS, Web Speech API, Hugging Face Kokoro-82M*

@@ -2,6 +2,15 @@ import { create } from 'zustand'
 
 export type InputMode = 'url' | 'file'
 export type ProcessMode = 'generate' | 'stream'
+export type TTSEngine = 'webspeech' | 'huggingface'
+
+export interface VoiceOption {
+  id: string
+  name: string
+  language: string
+  engine: TTSEngine
+  nativeVoice?: SpeechSynthesisVoice
+}
 
 export interface AppState {
   // Input state
@@ -21,10 +30,18 @@ export interface AppState {
   setExtractedContent: (content: string) => void
   
   // Voice state
-  selectedVoice: SpeechSynthesisVoice | null
-  setSelectedVoice: (voice: SpeechSynthesisVoice | null) => void
-  availableVoices: SpeechSynthesisVoice[]
-  setAvailableVoices: (voices: SpeechSynthesisVoice[]) => void
+  selectedVoice: VoiceOption | null
+  setSelectedVoice: (voice: VoiceOption | null) => void
+  availableVoices: VoiceOption[]
+  setAvailableVoices: (voices: VoiceOption[]) => void
+  
+  // TTS Engine state
+  ttsEngine: TTSEngine
+  setTTSEngine: (engine: TTSEngine) => void
+  
+  // Hugging Face configuration
+  huggingFaceApiKey: string
+  setHuggingFaceApiKey: (apiKey: string) => void
   
   // Process mode
   processMode: ProcessMode
@@ -35,6 +52,8 @@ export interface AppState {
   setIsPlaying: (playing: boolean) => void
   currentUtterance: SpeechSynthesisUtterance | null
   setCurrentUtterance: (utterance: SpeechSynthesisUtterance | null) => void
+  currentAudio: HTMLAudioElement | null
+  setCurrentAudio: (audio: HTMLAudioElement | null) => void
   
   // UI state
   isLoading: boolean
@@ -72,6 +91,17 @@ export const useAppStore = create<AppState>((set) => ({
   availableVoices: [],
   setAvailableVoices: (voices) => set({ availableVoices: voices }),
   
+  // TTS Engine state
+  ttsEngine: 'huggingface', // Default to Hugging Face TTS
+  setTTSEngine: (engine) => set({ ttsEngine: engine }),
+  
+  // Hugging Face configuration
+  huggingFaceApiKey: localStorage.getItem('huggingface_api_key') || '',
+  setHuggingFaceApiKey: (apiKey) => {
+    localStorage.setItem('huggingface_api_key', apiKey)
+    set({ huggingFaceApiKey: apiKey })
+  },
+  
   // Process mode
   processMode: 'stream',
   setProcessMode: (mode) => set({ processMode: mode }),
@@ -81,6 +111,8 @@ export const useAppStore = create<AppState>((set) => ({
   setIsPlaying: (playing) => set({ isPlaying: playing }),
   currentUtterance: null,
   setCurrentUtterance: (utterance) => set({ currentUtterance: utterance }),
+  currentAudio: null,
+  setCurrentAudio: (audio) => set({ currentAudio: audio }),
   
   // UI state
   isLoading: false,

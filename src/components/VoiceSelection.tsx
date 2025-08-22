@@ -1,24 +1,59 @@
 import { useEffect } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { ChevronsUpDown, Check, Volume2 } from 'lucide-react'
-import { useAppStore } from '../store/useAppStore'
+import { useAppStore, type VoiceOption } from '../store/useAppStore'
+import HuggingFaceTTSService from '../services/huggingface'
 
 export default function VoiceSelection() {
   const {
     selectedVoice,
     setSelectedVoice,
     availableVoices,
-    setAvailableVoices
+    setAvailableVoices,
+    ttsEngine,
+    huggingFaceApiKey
   } = useAppStore()
   
   useEffect(() => {
-    const loadVoices = () => {
-      const voices = speechSynthesis.getVoices()
+    const loadVoices = async () => {
+      let voices: VoiceOption[] = []
+      
+      if (ttsEngine === 'webspeech') {
+        // Load Web Speech API voices
+        const webSpeechVoices = speechSynthesis.getVoices()
+        if (webSpeechVoices.length > 0) {
+          voices = webSpeechVoices.map(voice => ({
+            id: `webspeech-${voice.name}-${voice.lang}`,
+            name: voice.name,
+            language: voice.lang,
+            engine: 'webspeech' as const,
+            nativeVoice: voice
+          }))
+        }
+      } else if (ttsEngine === 'huggingface' && huggingFaceApiKey) {
+        // Load Hugging Face voices
+        try {
+          const service = new HuggingFaceTTSService({
+            apiKey: huggingFaceApiKey,
+            model: 'hexgrad/Kokoro-82M'
+          })
+          const hfVoices = service.getAvailableVoices()
+          voices = hfVoices.map(voice => ({
+            id: `huggingface-${voice.id}`,
+            name: voice.name,
+            language: voice.language,
+            engine: 'huggingface' as const
+          }))
+        } catch (error) {
+          console.error('Failed to load Hugging Face voices:', error)
+        }
+      }
+      
       if (voices.length > 0) {
         setAvailableVoices(voices)
         // Set default voice to the first English voice or first available voice
-        if (!selectedVoice) {
-          const englishVoice = voices.find(voice => voice.lang.startsWith('en'))
+        if (!selectedVoice || selectedVoice.engine !== ttsEngine) {
+          const englishVoice = voices.find(voice => voice.language.startsWith('en'))
           setSelectedVoice(englishVoice || voices[0])
         }
       }
@@ -26,8 +61,8 @@ export default function VoiceSelection() {
     
     loadVoices()
     
-    // Some browsers load voices asynchronously
-    if (speechSynthesis.onvoiceschanged !== undefined) {
+    // For Web Speech API, also listen for voice changes
+    if (ttsEngine === 'webspeech' && speechSynthesis.onvoiceschanged !== undefined) {
       speechSynthesis.onvoiceschanged = loadVoices
     }
     
@@ -36,23 +71,46 @@ export default function VoiceSelection() {
         speechSynthesis.onvoiceschanged = null
       }
     }
-  }, [selectedVoice, setSelectedVoice, setAvailableVoices])
+  }, [ttsEngine, huggingFaceApiKey, selectedVoice, setSelectedVoice, setAvailableVoices])
   
-  const testVoice = () => {
-    if (selectedVoice) {
-      const utterance = new SpeechSynthesisUtterance('Hello! This is how I sound.')
-      utterance.voice = selectedVoice
-      utterance.rate = 1.0
-      utterance.pitch = 1.0
-      utterance.volume = 0.8
-      speechSynthesis.speak(utterance)
+  const testVoice = async () => {
+    if (!selectedVoice) return
+    
+    try {
+      if (selectedVoice.engine === 'webspeech' && selectedVoice.nativeVoice) {
+        const utterance = new SpeechSynthesisUtterance('Hello! This is how I sound.')
+        utterance.voice = selectedVoice.nativeVoice
+        utterance.rate = 1.0
+        utterance.pitch = 1.0
+        utterance.volume = 0.8
+        speechSynthesis.speak(utterance)
+      } else if (selectedVoice.engine === 'huggingface' && huggingFaceApiKey) {
+        const service = new HuggingFaceTTSService({
+          apiKey: huggingFaceApiKey,
+          model: 'hexgrad/Kokoro-82M'
+        })
+        const result = await service.generateAudio({
+          text: 'Hello! This is how I sound with Kokoro TTS.',
+          voice: selectedVoice.id.replace('huggingface-', '')
+        })
+        
+        const audio = new Audio(result.audioUrl)
+        audio.play()
+        
+        // Cleanup after playing
+        audio.addEventListener('ended', () => {
+          URL.revokeObjectURL(result.audioUrl)
+        })
+      }
+    } catch (error) {
+      console.error('Voice test failed:', error)
     }
   }
   
-  const getVoiceDisplayName = (voice: SpeechSynthesisVoice) => {
+  const getVoiceDisplayName = (voice: VoiceOption) => {
     const parts = []
     if (voice.name) parts.push(voice.name)
-    if (voice.lang) parts.push(`(${voice.lang})`)
+    if (voice.language) parts.push(`(${voice.language})`)
     return parts.join(' ') || 'Unknown Voice'
   }
   
@@ -73,6 +131,10 @@ export default function VoiceSelection() {
       'hi': '🇮🇳'
     }
     return flags[langCode] || '🌐'
+  }
+  
+  const getEngineIcon = (engine: 'webspeech' | 'huggingface') => {
+    return engine === 'huggingface' ? '🤖' : '🔊'
   }
   
   if (availableVoices.length === 0) {
@@ -110,12 +172,20 @@ export default function VoiceSelection() {
               {selectedVoice && (
                 <>
                   <span className="mr-2 text-lg">
-                    {getVoiceFlag(selectedVoice.lang)}
+                    {getVoiceFlag(selectedVoice.language)}
                   </span>
                   <span className="block truncate">
                     {getVoiceDisplayName(selectedVoice)}
                   </span>
-                  {selectedVoice.localService && (
+                  <span className="ml-2 text-xs">
+                    {getEngineIcon(selectedVoice.engine)}
+                  </span>
+                  {selectedVoice.engine === 'huggingface' && (
+                    <span className="ml-2 text-xs text-purple-600 bg-purple-100 px-2 py-0.5 rounded-full">
+                      AI
+                    </span>
+                  )}
+                  {selectedVoice.engine === 'webspeech' && selectedVoice.nativeVoice?.localService && (
                     <span className="ml-2 text-xs text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
                       Local
                     </span>
@@ -142,7 +212,7 @@ export default function VoiceSelection() {
             <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               {availableVoices.map((voice) => (
                 <Listbox.Option
-                  key={`${voice.name}-${voice.lang}`}
+                  key={voice.id}
                   className={({ active }) =>
                     `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
                       active ? 'bg-primary-50 text-primary-900' : 'text-gray-900'
@@ -154,7 +224,7 @@ export default function VoiceSelection() {
                     <>
                       <div className="flex items-center">
                         <span className="mr-3 text-lg">
-                          {getVoiceFlag(voice.lang)}
+                          {getVoiceFlag(voice.language)}
                         </span>
                         <span
                           className={`block truncate ${
@@ -163,7 +233,15 @@ export default function VoiceSelection() {
                         >
                           {getVoiceDisplayName(voice)}
                         </span>
-                        {voice.localService && (
+                        <span className="ml-2 text-xs">
+                          {getEngineIcon(voice.engine)}
+                        </span>
+                        {voice.engine === 'huggingface' && (
+                          <span className="ml-2 text-xs text-purple-600 bg-purple-100 px-2 py-0.5 rounded-full">
+                            AI
+                          </span>
+                        )}
+                        {voice.engine === 'webspeech' && voice.nativeVoice?.localService && (
                           <span className="ml-2 text-xs text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
                             Local
                           </span>
