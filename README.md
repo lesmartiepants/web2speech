@@ -6,6 +6,10 @@ A beautiful, mobile-friendly Progressive Web App that transforms web content and
 ![PWA Ready](https://img.shields.io/badge/PWA-Ready-blue)
 ![Mobile Responsive](https://img.shields.io/badge/Mobile-Responsive-purple)
 
+## 🖼️ UI Preview
+
+![UI Preview](public/ui-preview.png)
+
 ## ✨ Features
 
 ### 🔄 Flexible Input Methods
