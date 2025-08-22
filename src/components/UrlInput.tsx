@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, Loader2 } from 'lucide-react'
+import { Link, Loader2, Globe, Zap } from 'lucide-react'
 import { useAppStore } from '../store/useAppStore'
 
 export default function UrlInput() {
@@ -58,15 +58,25 @@ export default function UrlInput() {
   }
   
   return (
-    <div className="bg-white/90 backdrop-blur-md rounded-2xl p-6 border border-gray-200 shadow-lg">
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="glass-morphism-strong rounded-3xl p-8 shadow-2xl">
+      <div className="flex items-center space-x-3 mb-6">
+        <div className="w-12 h-12 bg-gradient-to-br from-primary-400 to-primary-600 rounded-2xl flex items-center justify-center shadow-lg">
+          <Globe className="w-6 h-6 text-white" />
+        </div>
         <div>
-          <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-2">
+          <h3 className="text-xl font-bold text-white">Web Content Extraction</h3>
+          <p className="text-gray-300 text-sm">Enter any website URL to extract readable content</p>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="space-y-3">
+          <label htmlFor="url" className="block text-sm font-semibold text-white">
             Website URL
           </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Link className="h-5 w-5 text-gray-400" />
+          <div className="relative group">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
+              <Link className="h-5 w-5 text-gray-400 group-focus-within:text-primary-400 transition-colors" />
             </div>
             <input
               type="url"
@@ -74,12 +84,17 @@ export default function UrlInput() {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="https://example.com/article"
-              className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm placeholder-gray-400"
+              className="block w-full pl-12 pr-16 py-4 bg-dark-800/50 backdrop-blur-sm border-2 border-white/20 rounded-2xl focus:ring-4 focus:ring-primary-400/50 focus:border-primary-400 text-white text-lg placeholder-gray-400 transition-all duration-300"
               disabled={isLoading}
             />
             {isLoading && (
-              <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-                <Loader2 className="h-5 w-5 text-primary-500 animate-spin" />
+              <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
+                <Loader2 className="h-6 w-6 text-primary-400 animate-spin" />
+              </div>
+            )}
+            {!isLoading && inputValue && isValidUrl(inputValue.trim()) && (
+              <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
+                <Zap className="h-5 w-5 text-accent-400" />
               </div>
             )}
           </div>
@@ -88,15 +103,27 @@ export default function UrlInput() {
         <button
           type="submit"
           disabled={!inputValue.trim() || !isValidUrl(inputValue.trim()) || isLoading}
-          className="w-full bg-primary-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="relative w-full group overflow-hidden"
         >
-          {isLoading ? (
-            <span className="flex items-center justify-center">
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Extracting Content...
-            </span>
-          ) : (
-            'Extract Content'
+          <div className={`w-full py-4 px-6 rounded-2xl font-bold text-lg transition-all duration-300 ${
+            (!inputValue.trim() || !isValidUrl(inputValue.trim()) || isLoading)
+              ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+              : 'bg-gradient-to-r from-primary-500 via-primary-600 to-accent-500 text-white shadow-xl hover:shadow-2xl transform hover:scale-[1.02] hover:from-primary-600 hover:via-primary-700 hover:to-accent-600'
+          }`}>
+            {isLoading ? (
+              <span className="flex items-center justify-center">
+                <Loader2 className="w-5 h-5 mr-3 animate-spin" />
+                Extracting Content...
+              </span>
+            ) : (
+              <span className="flex items-center justify-center">
+                <Zap className="w-5 h-5 mr-3" />
+                Extract Content
+              </span>
+            )}
+          </div>
+          {!isLoading && inputValue.trim() && isValidUrl(inputValue.trim()) && (
+            <div className="absolute inset-0 bg-gradient-to-r from-primary-600/0 via-white/10 to-primary-600/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
           )}
         </button>
       </form>

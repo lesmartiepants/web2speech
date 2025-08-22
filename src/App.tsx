@@ -65,17 +65,38 @@ For high-quality downloadable audio files, select Hugging Face Kokoro-82M as you
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="min-h-screen">
       <Header />
       
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Transform any content into beautiful speech
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Paste a URL or upload a file to get started. Choose your preferred TTS engine and voice, then enjoy a beautiful reading experience with synchronized audio.
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+        {/* Hero Section */}
+        <div className="text-center space-y-8">
+          <div className="space-y-4">
+            <h2 className="text-4xl md:text-6xl font-bold gradient-text">
+              Transform Content Into
+            </h2>
+            <h2 className="text-4xl md:text-6xl font-bold text-white">
+              Beautiful Speech
+            </h2>
+          </div>
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            Experience the future of text-to-speech. Paste a URL or upload a file to get started. 
+            Choose your preferred AI voice and enjoy a synchronized reading experience like never before.
           </p>
+          <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-400">
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-primary-400 rounded-full animate-pulse"></div>
+              <span>AI-Powered</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-accent-400 rounded-full animate-pulse"></div>
+              <span>Real-time Sync</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-primary-400 rounded-full animate-pulse"></div>
+              <span>Premium Quality</span>
+            </div>
+          </div>
         </div>
 
         <ErrorDisplay />
@@ -90,17 +111,33 @@ For high-quality downloadable audio files, select Hugging Face Kokoro-82M as you
             
             <VoiceSelection />
             
-            <div className="bg-white/90 backdrop-blur-md rounded-2xl p-6 border border-gray-200 shadow-lg">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Content Preview</h3>
-              <div className="bg-gray-50 rounded-lg p-4 max-h-40 overflow-y-auto">
-                <p className="text-sm text-gray-700 whitespace-pre-wrap">
+            <div className="glass-morphism-strong rounded-3xl p-8 shadow-2xl">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="w-3 h-3 bg-accent-400 rounded-full animate-pulse"></div>
+                <h3 className="text-2xl font-bold text-white">Content Preview</h3>
+              </div>
+              <div className="bg-dark-800/50 backdrop-blur-sm rounded-2xl p-6 max-h-48 overflow-y-auto border border-white/10">
+                <p className="text-gray-300 whitespace-pre-wrap leading-relaxed">
                   {extractedContent.slice(0, 500)}
                   {extractedContent.length > 500 && '...'}
                 </p>
               </div>
-              <p className="text-sm text-gray-500 mt-2">
-                {extractedContent.split(/\s+/).length} words • ~{Math.ceil(extractedContent.split(/\s+/).length / 200)} minutes reading time
-              </p>
+              <div className="flex items-center justify-between mt-6 pt-4 border-t border-white/10">
+                <div className="flex items-center space-x-6 text-gray-400">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-primary-400 rounded-full"></div>
+                    <span className="text-sm font-medium">
+                      {extractedContent.split(/\s+/).length} words
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-accent-400 rounded-full"></div>
+                    <span className="text-sm font-medium">
+                      ~{Math.ceil(extractedContent.split(/\s+/).length / 200)} min read
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
             
             <ProcessModeSelection />
@@ -109,11 +146,24 @@ For high-quality downloadable audio files, select Hugging Face Kokoro-82M as you
               <div className="text-center">
                 <button
                   onClick={handleStartReading}
-                  className="bg-gradient-to-r from-primary-600 to-primary-700 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:from-primary-700 hover:to-primary-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transform hover:scale-105 transition-all shadow-lg"
+                  className="relative btn-primary text-xl px-12 py-5 font-bold group overflow-hidden"
                 >
-                  {processMode === 'generate' ? (
-                    ttsEngine === 'huggingface' ? '🎵 Generate Audio File (Kokoro-82M)' : '🎵 Generate Audio File'
-                  ) : '📖 Start Reading Experience'}
+                  <span className="relative z-10 flex items-center space-x-3">
+                    {processMode === 'generate' ? (
+                      <>
+                        <span>🎵</span>
+                        <span>
+                          {ttsEngine === 'huggingface' ? 'Generate Audio File (Kokoro-82M)' : 'Generate Audio File'}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span>✨</span>
+                        <span>Start Reading Experience</span>
+                      </>
+                    )}
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary-600/0 via-white/10 to-primary-600/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                 </button>
               </div>
             )}
@@ -123,16 +173,21 @@ For high-quality downloadable audio files, select Hugging Face Kokoro-82M as you
       
       <ReaderView />
       
-      {/* Footer */}
-      <footer className="bg-white/80 backdrop-blur-md border-t border-gray-200 mt-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center text-gray-600">
-            <p className="mb-2">
+      {/* Enhanced Footer */}
+      <footer className="glass-morphism mt-24 border-t border-white/20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="text-center space-y-4">
+            <p className="text-lg text-white font-medium">
               Built with ❤️ for accessibility and beautiful reading experiences
             </p>
-            <p className="text-sm">
-              Powered by modern web technologies: React, TypeScript, Tailwind CSS, Web Speech API, Hugging Face Kokoro-82M
+            <p className="text-gray-400">
+              Powered by React • TypeScript • Tailwind CSS • Web Speech API • Hugging Face Kokoro-82M
             </p>
+            <div className="flex justify-center space-x-8 text-sm text-gray-500 mt-6">
+              <span>© 2024 Web2Speech</span>
+              <span>•</span>
+              <span>Made with modern web technologies</span>
+            </div>
           </div>
         </div>
       </footer>

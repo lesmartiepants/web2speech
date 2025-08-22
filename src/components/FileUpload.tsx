@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { Upload, FileText, X, Loader2 } from 'lucide-react'
+import { Upload, FileText, X, Loader2, Sparkles, File } from 'lucide-react'
 import { useAppStore } from '../store/useAppStore'
 
 export default function FileUpload() {
@@ -74,57 +74,98 @@ export default function FileUpload() {
   }
   
   return (
-    <div className="bg-white/90 backdrop-blur-md rounded-2xl p-6 border border-gray-200 shadow-lg">
+    <div className="glass-morphism-strong rounded-3xl p-8 shadow-2xl">
+      <div className="flex items-center space-x-3 mb-6">
+        <div className="w-12 h-12 bg-gradient-to-br from-accent-400 to-accent-600 rounded-2xl flex items-center justify-center shadow-lg">
+          <File className="w-6 h-6 text-white" />
+        </div>
+        <div>
+          <h3 className="text-xl font-bold text-white">File Upload</h3>
+          <p className="text-gray-300 text-sm">Upload PDFs and text documents</p>
+        </div>
+      </div>
+
       {!selectedFile ? (
         <div
           {...getRootProps()}
-          className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors ${
+          className={`relative border-2 border-dashed rounded-3xl p-12 text-center cursor-pointer transition-all duration-300 group overflow-hidden ${
             isDragActive
-              ? 'border-primary-400 bg-primary-50'
-              : 'border-gray-300 hover:border-primary-400 hover:bg-primary-50'
+              ? 'border-accent-400/50 bg-accent-500/10 scale-[1.02]'
+              : 'border-white/30 hover:border-accent-400/50 hover:bg-accent-500/5 hover:scale-[1.01]'
           }`}
         >
           <input {...getInputProps()} />
-          <div className="flex flex-col items-center">
-            <Upload className="w-12 h-12 text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              {isDragActive ? 'Drop your file here' : 'Upload a file'}
-            </h3>
-            <p className="text-sm text-gray-500 mb-4">
-              Drag & drop or click to select a PDF or text file
-            </p>
-            <div className="flex items-center space-x-2 text-xs text-gray-400">
-              <span className="px-2 py-1 bg-gray-100 rounded">PDF</span>
-              <span className="px-2 py-1 bg-gray-100 rounded">TXT</span>
+          
+          {/* Background animation */}
+          <div className="absolute inset-0 bg-gradient-to-r from-accent-500/0 via-accent-400/5 to-accent-500/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+          
+          <div className="relative z-10">
+            <div className="flex flex-col items-center">
+              <div className="relative mb-6">
+                <div className="w-20 h-20 bg-gradient-to-br from-accent-400 to-accent-600 rounded-3xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
+                  <Upload className="w-10 h-10 text-white" />
+                </div>
+                <div className="absolute -inset-2 bg-gradient-to-r from-accent-400 to-accent-600 rounded-3xl blur opacity-20 group-hover:opacity-40 transition-opacity"></div>
+              </div>
+              
+              <h3 className="text-2xl font-bold text-white mb-3">
+                {isDragActive ? 'Drop your file here' : 'Upload Your Document'}
+              </h3>
+              <p className="text-lg text-gray-300 mb-8 max-w-md leading-relaxed">
+                Drag & drop or click to select a PDF or text file for AI-powered speech conversion
+              </p>
+              
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2 px-4 py-2 bg-accent-500/20 rounded-full border border-accent-400/30">
+                  <FileText className="w-4 h-4 text-accent-400" />
+                  <span className="text-accent-200 font-medium">PDF</span>
+                </div>
+                <div className="flex items-center space-x-2 px-4 py-2 bg-accent-500/20 rounded-full border border-accent-400/30">
+                  <FileText className="w-4 h-4 text-accent-400" />
+                  <span className="text-accent-200 font-medium">TXT</span>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-2 mt-6 text-sm text-gray-400">
+                <Sparkles className="w-4 h-4 text-accent-400" />
+                <span>AI-powered content extraction</span>
+              </div>
             </div>
           </div>
         </div>
       ) : (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-            <div className="flex items-center space-x-3">
-              <FileText className="w-8 h-8 text-primary-600" />
-              <div>
-                <p className="font-medium text-gray-900">{selectedFile.name}</p>
-                <p className="text-sm text-gray-500">
-                  {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
-                </p>
+        <div className="space-y-6">
+          <div className="glass-morphism rounded-2xl p-6 border border-white/20">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-primary-400 to-primary-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <FileText className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <p className="font-bold text-white text-lg">{selectedFile.name}</p>
+                  <p className="text-gray-300">
+                    {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                  </p>
+                </div>
               </div>
+              {!isLoading && (
+                <button
+                  onClick={removeFile}
+                  className="p-3 text-gray-400 hover:text-red-400 transition-colors hover:bg-red-500/10 rounded-xl"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              )}
             </div>
-            {!isLoading && (
-              <button
-                onClick={removeFile}
-                className="p-2 text-gray-400 hover:text-red-500 transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            )}
           </div>
           
           {isLoading && (
-            <div className="flex items-center justify-center py-4">
-              <Loader2 className="w-6 h-6 text-primary-500 animate-spin mr-2" />
-              <span className="text-sm text-gray-600">Extracting text from file...</span>
+            <div className="flex items-center justify-center py-8 space-x-4">
+              <Loader2 className="w-8 h-8 text-accent-400 animate-spin" />
+              <div className="text-center">
+                <p className="text-white font-semibold text-lg">Extracting content...</p>
+                <p className="text-gray-400">AI is processing your document</p>
+              </div>
             </div>
           )}
         </div>
