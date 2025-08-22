@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
-import { ChevronsUpDown, Check, Volume2, Mic, Sparkles } from 'lucide-react'
+import { ChevronsUpDown, Check, Volume2, Mic } from 'lucide-react'
 import { useAppStore, type VoiceOption } from '../store/useAppStore'
 import HuggingFaceTTSService from '../services/huggingface'
 
