@@ -35,7 +35,7 @@ export default function UrlInput() {
         setIsLoading(false)
       }, 2000)
       
-    } catch (error) {
+    } catch {
       setError('Failed to extract content from URL. Please check the URL and try again.')
       setIsLoading(false)
     }
@@ -52,7 +52,7 @@ export default function UrlInput() {
     try {
       new URL(string)
       return true
-    } catch (_) {
+    } catch {
       return false
     }
   }

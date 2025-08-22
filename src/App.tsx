@@ -29,13 +29,12 @@ function App() {
       try {
         if (ttsEngine === 'huggingface' && huggingFaceApiKey && selectedVoice) {
           const service = new HuggingFaceTTSService({
-            apiKey: huggingFaceApiKey,
-            model: 'hexgrad/Kokoro-82M'
+            apiKey: huggingFaceApiKey
           })
           
           const result = await service.generateAudio({
             text: extractedContent,
-            voice: selectedVoice.id.replace('huggingface-', '')
+            voice: selectedVoice.id
           })
           
           // Create download link

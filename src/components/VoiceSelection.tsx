@@ -39,7 +39,7 @@ export default function VoiceSelection() {
           })
           const hfVoices = service.getAvailableVoices()
           voices = hfVoices.map(voice => ({
-            id: `huggingface-${voice.id}`,
+            id: voice.id,
             name: voice.name,
             language: voice.language,
             engine: 'huggingface' as const
@@ -91,7 +91,7 @@ export default function VoiceSelection() {
         })
         const result = await service.generateAudio({
           text: 'Hello! This is how I sound with Kokoro TTS.',
-          voice: selectedVoice.id.replace('huggingface-', '')
+          voice: selectedVoice.id
         })
         
         const audio = new Audio(result.audioUrl)

@@ -5,7 +5,7 @@
 
 export interface HuggingFaceTTSConfig {
   apiKey?: string;
-  model: string;
+  model?: string;
   voice?: string;
   speed?: number;
   pitch?: number;
@@ -30,7 +30,10 @@ export class HuggingFaceTTSService {
   private baseUrl = 'https://api-inference.huggingface.co/models/';
 
   constructor(config: HuggingFaceTTSConfig) {
-    this.apiKey = config.apiKey || '';
+    if (!config.apiKey) {
+      throw new Error('Hugging Face API key is required.');
+    }
+    this.apiKey = config.apiKey;
     this.model = config.model || 'hexgrad/Kokoro-82M';
   }
 
@@ -83,10 +86,10 @@ export class HuggingFaceTTSService {
   getAvailableVoices(): Array<{ id: string; name: string; language: string; }> {
     // Kokoro-82M typically supports these voices
     return [
-      { id: 'kokoro-female-1', name: 'Kokoro Female 1', language: 'en-US' },
-      { id: 'kokoro-female-2', name: 'Kokoro Female 2', language: 'en-US' },
-      { id: 'kokoro-male-1', name: 'Kokoro Male 1', language: 'en-US' },
-      { id: 'kokoro-neutral', name: 'Kokoro Neutral', language: 'en-US' },
+      { id: 'female-1', name: 'Kokoro Female 1', language: 'en-US' },
+      { id: 'female-2', name: 'Kokoro Female 2', language: 'en-US' },
+      { id: 'male-1', name: 'Kokoro Male 1', language: 'en-US' },
+      { id: 'neutral', name: 'Kokoro Neutral', language: 'en-US' },
     ];
   }
 
@@ -117,7 +120,7 @@ export class HuggingFaceTTSService {
   ): Promise<AudioGenerationResult[]> {
     // Split long text into chunks (Kokoro-82M may have text length limits)
     const maxChunkLength = 1000; // Adjust based on model limits
-    const sentences = text.match(/[^\.!?]+[\.!?]+/g) || [text];
+    const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
     const chunks: string[] = [];
     
     let currentChunk = '';
