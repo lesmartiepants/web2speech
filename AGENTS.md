@@ -1,51 +1,60 @@
-# Jules Rules
+# Coding Agent Guidelines
 
-This document outlines the rules and best practices that I, Jules, will follow when working on this repository. These rules are based on the official GitHub Copilot documentation and community-driven best practices.
+This document outlines the engineering standards and best practices for coding agents working on this repository. Follow these guidelines to maintain the highest quality codebase and development practices of a senior software engineer and architect.
 
-## General Principles
+## Core Engineering Principles
 
-*   **Proactive Problem Solving:** I will strive to solve problems autonomously, but I will ask for clarification when the user's request is ambiguous, when I'm stuck after trying multiple approaches, or when a decision would significantly alter the scope of the original request.
-*   **Verify My Work:** After every action that modifies the state of the codebase, I will use a read-only tool (like `read_file`, `ls`, or `grep`) to confirm that the action was executed successfully and had the intended effect.
-*   **Edit Source, Not Artifacts:** If I determine a file is a build artifact (e.g., located in a `dist`, `build`, or `target` directory), I will not edit it directly. Instead, I will trace the code back to its source and make my changes there.
-*   **Proactive Testing:** For any code change, I will attempt to find and run relevant tests to ensure my changes are correct and have not caused regressions. When practical, I will practice test-driven development by writing a failing test first.
+*   **Mindful Development:** Think before you code. Analyze the problem thoroughly, understand the existing architecture, and consider the long-term implications of every change. Always ask yourself: "Is this the simplest solution that solves the problem?"
+*   **Minimal Changes:** Make the smallest possible change to achieve the desired outcome. Surgical precision is preferred over broad refactoring unless absolutely necessary. Every line of code added or modified should serve a clear purpose.
+*   **Pattern Recognition and Development:** Identify and leverage existing patterns in the codebase. When creating new functionality, establish clear, consistent patterns that other developers can follow. Document architectural decisions that establish new patterns.
+*   **Verification First:** After every modification, verify the change works as intended using appropriate tools and tests. Source code is the single source of truth - always edit source files, never build artifacts.
 
-## Task Scoping
+## Software Engineering Standards
 
-*   **Clear and Well-Scoped Tasks:** I work best when I am assigned clear, well-scoped tasks. An ideal task includes:
-    *   A clear description of the problem to be solved or the work required.
-    *   Complete acceptance criteria on what a good solution looks like (e.g., should there be unit tests?).
-    *   Directions about which files need to be changed.
+*   **DRY (Don't Repeat Yourself):** Eliminate code duplication through abstraction, shared utilities, and reusable components. If you find yourself writing similar code twice, extract it into a reusable function or module.
+*   **SOLID Principles:** 
+    - Single Responsibility: Each function/class should have one reason to change
+    - Open/Closed: Open for extension, closed for modification
+    - Liskov Substitution: Objects should be replaceable with instances of their subtypes
+    - Interface Segregation: Depend on abstractions, not concretions
+    - Dependency Inversion: High-level modules should not depend on low-level modules
+*   **Code Quality:** Write self-documenting code with clear variable names, function names, and structure. Comments should explain "why", not "what". Maintain consistent formatting and style throughout the codebase.
+*   **Test-Driven Development:** When practical, write failing tests before implementing features. Ensure all changes have appropriate test coverage. Run tests early and often to prevent regressions.
 
-*   **Task Types:** I am well-suited for tasks such as fixing bugs, altering user interface features, improving test coverage, updating documentation, improving accessibility, and addressing technical debt. I may struggle with complex, broadly scoped tasks that require cross-repository knowledge, deep domain knowledge, or substantial business logic.
+## Architecture and Design
 
-## Providing Context
+*   **Understand Before Modifying:** Before making any changes, thoroughly understand the existing architecture, dependencies, and data flow. Read related code, understand the context, and identify potential side effects.
+*   **Consistency is King:** Follow existing code patterns, naming conventions, and architectural decisions. When in doubt, mirror the style and structure of similar existing code.
+*   **Performance Considerations:** Consider the performance impact of every change. Avoid premature optimization, but be mindful of algorithmic complexity, memory usage, and network calls.
+*   **Security First:** Always consider security implications. Validate inputs, sanitize outputs, follow principle of least privilege, and never commit sensitive information.
 
-*   **Custom Instructions:** I will use the `.github/copilot-instructions.md` or a `.cursorrules` file in the root of the repository to understand the project's coding standards, project structure, and other important information. If these files do not exist, I may create one.
-*   **Path-Specific Instructions:** I will look for and use path-specific instructions in the `.github/instructions/` directory to understand how to work with specific file types.
+## Code Organization and Structure
 
-## Iterating on Work
+*   **Clear Separation of Concerns:** Organize code into logical modules with clear boundaries. Business logic, data access, and presentation layers should be clearly separated.
+*   **Meaningful Abstractions:** Create abstractions that hide complexity while revealing intent. Interfaces and abstract classes should represent real-world concepts or clear architectural boundaries.
+*   **Error Handling:** Implement robust error handling with meaningful error messages. Fail fast when possible, and provide clear recovery paths when failures are expected.
+*   **Documentation Standards:** Maintain up-to-date documentation for public APIs, complex algorithms, and architectural decisions. Code should be self-explaining, but context and reasoning should be documented.
 
-*   **Feedback and Iteration:** I understand that my work may not be perfect on the first try. I am designed to iterate on my work based on your feedback. You can mention me in pull request comments to ask for changes.
-*   **Batching Comments:** To ensure that I address all of your feedback in a single pass, it is best to batch your comments by creating a review, rather than leaving individual comments.
+## Development Workflow
 
-## Environment Setup
+*   **Environment Setup:** Understand the project setup requirements by examining:
+    - `package.json` for dependencies and scripts
+    - Project README.md for environment setup instructions  
+    - Configuration files for build tools, linters, and test frameworks
+    - Create setup documentation when gaps exist to help future contributors
+*   **Incremental Development:** Make small, testable changes. Each commit should represent a logical unit of work that can be reviewed and tested independently.
+*   **Feedback Integration:** Approach feedback as an opportunity to improve code quality. Address feedback systematically and comprehensively, ensuring all concerns are resolved before considering the work complete.
 
-*   **Pre-installing Dependencies:** To improve my performance, I will look for a `copilot-setup-steps.yml` file to pre-install any necessary dependencies in my environment. If this file does not exist, I may create one.
+## Project Standards
 
-## Specific Rules
+*   **Configuration Consistency:** Follow established configuration patterns for linting, formatting, building, and testing. Maintain consistency across all configuration files.
+*   **Dependency Management:** Be conservative with new dependencies. Evaluate alternatives, consider bundle size impact, and ensure dependencies are actively maintained and secure.
+*   **Version Control:** Write clear, descriptive commit messages following the project's conventions. Group related changes into atomic commits that tell a coherent story.
+*   **Code Review Readiness:** Structure changes to facilitate easy code review. Separate refactoring from feature work, include tests with implementation, and provide clear explanations for complex changes.
 
-*   **Markdown for Documentation:** Always use Markdown for documentation and README files.
-*   **README.md Structure:** Maintain the existing structure of the README.md file.
-*   **Organization of Rules:** Organize `.cursorrules` files into the main categories within the 'rules' directory.
-*   **Naming and Formatting:** Use descriptive names for `.cursorrules` files and their folders. Maintain alphabetical order within each category in the README.md file.
-*   **Content Guidelines:** When creating or editing `.cursorrules` files, focus on project-specific instructions and best practices. Include comments in `.cursorrules` files to explain complex rules or provide context.
-*   **Maintenance and Updates:** Update the README.md file when adding new `.cursorrules` files. Ensure all links in the README.md file are relative and correct.
-*   **Best Practices:** Maintain consistency in capitalization and punctuation throughout the repository. When referencing me, always use the correct capitalization and spacing.
-*   **File Location:** `.cursorrules` files are repo-specific "Rules for AI" and should be placed in the root of the repository.
+## Commit Message Standards
 
-## Commit Message Guidelines
-
-*   **Conventional Commits:** I will use the Conventional Commits specification to generate commit messages. The commit message should be structured as follows:
+*   **Conventional Commits:** Use the Conventional Commits specification for all commit messages:
     ```
     <type>[optional scope]: <description>
 
@@ -53,10 +62,16 @@ This document outlines the rules and best practices that I, Jules, will follow w
 
     [optional footer(s)]
     ```
-*   **Types:** The following types are allowed:
-    *   `fix`: a commit of the type fix patches a bug in your codebase (this correlates with PATCH in Semantic Versioning).
-    *   `feat`: a commit of the type feat introduces a new feature to the codebase (this correlates with MINOR in Semantic Versioning).
-    *   `BREAKING CHANGE`: a commit that has a footer BREAKING CHANGE:, or appends a ! after the type/scope, introduces a breaking API change (correlating with MAJOR in Semantic Versioning). A BREAKING CHANGE can be part of commits of any type.
-    *   other types: `build`, `chore`, `ci`, `docs`, `style`, `refactor`, `perf`, `test`.
-*   **Breaking Changes:** Breaking changes MUST be indicated in the type/scope prefix of a commit, or as an entry in the footer.
-*   **Case Sensitivity:** The units of information that make up Conventional Commits MUST NOT be treated as case sensitive by implementors, with the exception of BREAKING CHANGE which MUST be uppercase.
+*   **Commit Types:** Use appropriate types that clearly communicate the nature of the change:
+    *   `feat`: New features or functionality
+    *   `fix`: Bug fixes and corrections
+    *   `docs`: Documentation changes only
+    *   `style`: Code style changes (formatting, semicolons, etc.)
+    *   `refactor`: Code changes that neither fix bugs nor add features
+    *   `perf`: Performance improvements
+    *   `test`: Adding or correcting tests
+    *   `build`: Build system or external dependency changes
+    *   `ci`: Continuous integration configuration changes
+    *   `chore`: Other changes that don't modify src or test files
+*   **Breaking Changes:** Clearly indicate breaking changes with `!` after the type/scope or in the footer with `BREAKING CHANGE:`
+*   **Descriptive Messages:** Write commit messages that clearly explain both what changed and why, enabling easy understanding during code review and debugging.
