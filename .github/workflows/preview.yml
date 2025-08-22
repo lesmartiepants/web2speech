@@ -1,0 +1,42 @@
+name: Generate UI Preview
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  generate-preview:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Start app in background
+        run: npm run dev &
+
+      - name: Wait for app to be ready
+        run: sleep 15
+
+      - name: Create artifacts directory
+        run: mkdir -p artifacts
+
+      - name: Generate screenshot
+        run: env SCREENSHOT_PATH=artifacts/ui-preview-${{ github.sha }}.png node scripts/generate-screenshot.js
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-preview
+          path: artifacts/
