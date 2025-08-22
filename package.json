@@ -1,0 +1,61 @@
+{
+  "name": "web2speech",
+  "version": "1.0.0",
+  "description": "A simple, mobile-friendly web app that takes a URL or PDF and reads its content aloud using the latest state-of-the-art text-to-speech models from Hugging Face",
+  "main": "static/js/app.js",
+  "scripts": {
+    "dev": "python app.py",
+    "start": "gunicorn app:app",
+    "build": "echo 'Build process for production assets'",
+    "test": "echo 'No tests specified yet'",
+    "lint:css": "echo 'CSS linting would go here'",
+    "lint:js": "echo 'JavaScript linting would go here'",
+    "format": "echo 'Code formatting would go here'"
+  },
+  "keywords": [
+    "text-to-speech",
+    "tts",
+    "ai",
+    "hugging-face",
+    "accessibility",
+    "mobile",
+    "pwa",
+    "pdf",
+    "web-app"
+  ],
+  "author": "Web2Speech Team",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lesmartiepants/web2speech.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lesmartiepants/web2speech/issues"
+  },
+  "homepage": "https://github.com/lesmartiepants/web2speech#readme",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0",
+    "python": ">=3.8.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "iOS >= 12",
+    "Android >= 8"
+  ],
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "stylelint": "^15.0.0"
+  },
+  "dependencies": {},
+  "pwa": {
+    "name": "Web2Speech",
+    "short_name": "Web2Speech",
+    "description": "AI-Powered Text to Speech",
+    "theme_color": "#667eea",
+    "background_color": "#f9fafb"
+  }
+}

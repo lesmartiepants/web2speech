@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Transform URLs and PDFs into natural speech with AI-powered text-to-speech">
+    <meta name="theme-color" content="#667eea">
+    <title>Web2Speech - AI-Powered Text to Speech</title>
+    
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts - Modern and accessible -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="static/css/styles.css">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Favicon and iOS icons -->
+    <link rel="icon" type="image/svg+xml" href="static/icons/favicon.svg">
+    <link rel="apple-touch-icon" href="static/icons/apple-touch-icon.png">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#667eea"/>
+                                <stop offset="100%" style="stop-color:#764ba2"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="16" cy="16" r="14" fill="url(#logoGradient)"/>
+                        <path d="M12 10v12l8-6z" fill="white"/>
+                    </svg>
+                    <span class="logo-text">Web2Speech</span>
+                </div>
+                <button class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+                    <svg class="theme-icon" width="20" height="20" viewBox="0 0 20 20">
+                        <path d="M10 2a8 8 0 108 8c0-.3 0-.6-.1-.9A5.5 5.5 0 015.1 4.1c.3 0 .6-.1.9-.1z"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero" aria-labelledby="hero-title">
+                <h1 id="hero-title" class="hero-title">
+                    Transform Text to Natural Speech
+                </h1>
+                <p class="hero-description">
+                    Convert web pages, PDFs, and text into high-quality speech using cutting-edge AI models. Perfect for accessibility, multitasking, and learning on the go.
+                </p>
+            </section>
+
+            <!-- Input Section -->
+            <section class="input-section" aria-labelledby="input-title">
+                <h2 id="input-title" class="section-title sr-only">Input Options</h2>
+                
+                <!-- Input Type Selector -->
+                <div class="input-type-selector" role="tablist" aria-label="Choose input type">
+                    <button class="tab-button active" role="tab" aria-selected="true" aria-controls="url-panel" data-tab="url">
+                        <svg class="tab-icon" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+                            <path d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5z"/>
+                            <path d="M7.414 15.414a2 2 0 01-2.828-2.828l3-3a2 2 0 012.828 0 1 1 0 001.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5z"/>
+                        </svg>
+                        URL
+                    </button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="pdf-panel" data-tab="pdf">
+                        <svg class="tab-icon" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+                            <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm9 6H7v2h6V9zm-6 4h6v2H7v-2z"/>
+                        </svg>
+                        PDF
+                    </button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="text-panel" data-tab="text">
+                        <svg class="tab-icon" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                        </svg>
+                        Text
+                    </button>
+                </div>
+
+                <!-- Input Panels -->
+                <div class="input-panels">
+                    <!-- URL Panel -->
+                    <div id="url-panel" class="input-panel active" role="tabpanel" aria-labelledby="url-tab">
+                        <div class="input-group">
+                            <label for="url-input" class="input-label">Website URL</label>
+                            <div class="input-wrapper">
+                                <input 
+                                    type="url" 
+                                    id="url-input" 
+                                    class="text-input" 
+                                    placeholder="https://example.com/article" 
+                                    aria-describedby="url-help"
+                                >
+                                <button class="input-action-btn" type="button" aria-label="Paste from clipboard">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                                        <path d="M4 2a2 2 0 012-2h4a2 2 0 012 2v1h2a2 2 0 012 2v9a2 2 0 01-2 2H2a2 2 0 01-2-2V5a2 2 0 012-2h2V2z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div id="url-help" class="input-help">
+                                Enter a web page URL to extract and convert its content to speech
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PDF Panel -->
+                    <div id="pdf-panel" class="input-panel" role="tabpanel" aria-labelledby="pdf-tab">
+                        <div class="input-group">
+                            <label for="pdf-input" class="input-label">PDF Document</label>
+                            <div class="file-upload-area" id="pdf-drop-zone">
+                                <input 
+                                    type="file" 
+                                    id="pdf-input" 
+                                    class="file-input" 
+                                    accept=".pdf" 
+                                    aria-describedby="pdf-help"
+                                >
+                                <div class="file-upload-content">
+                                    <svg class="upload-icon" width="48" height="48" viewBox="0 0 48 48" aria-hidden="true">
+                                        <path d="M28 8H12a4 4 0 00-4 4v24a4 4 0 004 4h24a4 4 0 004-4V20L28 8z" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <path d="M28 8v12h12" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    </svg>
+                                    <div class="upload-text">
+                                        <span class="upload-primary">Drop PDF here or click to browse</span>
+                                        <span class="upload-secondary">Maximum file size: 10MB</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="pdf-help" class="input-help">
+                                Upload a PDF document to extract and convert its text to speech
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text Panel -->
+                    <div id="text-panel" class="input-panel" role="tabpanel" aria-labelledby="text-tab">
+                        <div class="input-group">
+                            <label for="text-input" class="input-label">Direct Text</label>
+                            <textarea 
+                                id="text-input" 
+                                class="textarea-input" 
+                                placeholder="Paste or type your text here..." 
+                                rows="6"
+                                aria-describedby="text-help"
+                            ></textarea>
+                            <div id="text-help" class="input-help">
+                                Enter text directly to convert to speech (up to 10,000 characters)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Voice Settings -->
+            <section class="voice-settings" aria-labelledby="voice-title">
+                <h2 id="voice-title" class="section-title">Voice Settings</h2>
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <label for="voice-select" class="setting-label">Voice</label>
+                        <select id="voice-select" class="select-input">
+                            <option value="default">Natural Voice (Default)</option>
+                            <option value="female-1">Sarah - Warm Female</option>
+                            <option value="male-1">David - Clear Male</option>
+                            <option value="female-2">Emma - Professional</option>
+                            <option value="male-2">James - Narrative</option>
+                        </select>
+                    </div>
+                    <div class="setting-group">
+                        <label for="speed-slider" class="setting-label">Speed</label>
+                        <input 
+                            type="range" 
+                            id="speed-slider" 
+                            class="range-input" 
+                            min="0.5" 
+                            max="2" 
+                            step="0.1" 
+                            value="1"
+                            aria-describedby="speed-value"
+                        >
+                        <span id="speed-value" class="range-value">1.0x</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Action Buttons -->
+            <section class="action-section">
+                <button class="primary-btn generate-btn" type="button">
+                    <svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+                        <path d="M10 2a8 8 0 108 8c0-.3 0-.6-.1-.9A5.5 5.5 0 015.1 4.1c.3 0 .6-.1.9-.1z"/>
+                    </svg>
+                    Generate Speech
+                </button>
+            </section>
+
+            <!-- Audio Player Section (Hidden initially) -->
+            <section class="audio-section hidden" aria-labelledby="audio-title">
+                <h2 id="audio-title" class="section-title">Generated Audio</h2>
+                <div class="audio-player">
+                    <audio controls class="audio-element">
+                        <source src="" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                    <div class="audio-actions">
+                        <button class="secondary-btn download-btn" type="button">
+                            <svg class="btn-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M8 12l-4-4h3V4h2v4h3l-4 4z"/>
+                                <path d="M2 14h12v2H2v-2z"/>
+                            </svg>
+                            Download
+                        </button>
+                        <button class="secondary-btn share-btn" type="button">
+                            <svg class="btn-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M12 8l-2-2v3H4v2h6v3l2-2zM2 2h6v2H4v8h8V8h2v6a2 2 0 01-2 2H2a2 2 0 01-2-2V4a2 2 0 012-2z"/>
+                            </svg>
+                            Share
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay hidden" aria-hidden="true">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p class="loading-text">Processing your content...</p>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div class="toast-container" aria-live="polite" aria-atomic="true"></div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="static/js/app.js"></script>
+</body>
+</html>
