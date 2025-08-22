@@ -79,7 +79,7 @@ const Component: FC<ComponentProps> = ({ prop }) => {
   const { state, setState } = useAppStore()
   
   return (
-    <div className="bg-white/90 backdrop-blur-md rounded-2xl p-6 border border-gray-200 shadow-lg">
+    <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-lg">
       {/* Component content */}
     </div>
   )
@@ -88,33 +88,31 @@ const Component: FC<ComponentProps> = ({ prop }) => {
 export default Component
 ```
 
-#### Glass Morphism Design Pattern
-- Use `bg-white/90 backdrop-blur-md` for glass effect containers
-- Combine with `border border-gray-200 shadow-lg` for depth
-- Use `rounded-2xl` for consistent border radius
-- Apply gradient backgrounds: `bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50`
+#### Mobile PWA UI Patterns
+- **Card-Based Layouts**: Use elevated cards with consistent shadows and rounded corners
+- **Native-Like Components**: Design components that feel natural on mobile devices
+- **Touch-Friendly**: Ensure adequate touch targets (min 44px) and gesture support
+- **Progressive Disclosure**: Use collapsible sections and step-by-step flows
+- **Modern Mobile Design**: Clean, minimal interfaces with strategic use of color and spacing
 
 ### TTS Engine Integration
 
-#### Web Speech API Pattern
+#### Web Speech API
 ```typescript
-const speak = (text: string, voice: SpeechSynthesisVoice) => {
+const speak = (text: string, voice: SpeechSynthesisVoice, options: { rate: number, pitch: number }) => {
   const utterance = new SpeechSynthesisUtterance(text)
   utterance.voice = voice
-  utterance.rate = rate
-  utterance.pitch = pitch
+  utterance.rate = options.rate
+  utterance.pitch = options.pitch
   speechSynthesis.speak(utterance)
 }
 ```
 
-#### Hugging Face API Pattern
+#### Hugging Face API
 ```typescript
 const service = new HuggingFaceTTSService({ apiKey })
-const result = await service.generateAudio({
-  text: content,
-  voice: selectedVoice.id
-})
-// Handle audio URL and cleanup
+const result = await service.generateAudio({ text, voice: voiceId })
+// Handle result.audioUrl for download or playback
 ```
 
 ### Styling Guidelines
@@ -137,9 +135,10 @@ primary: {
 ```
 
 #### Interactive Elements
-- Buttons: `bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800`
-- Focus states: `focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2`
-- Transitions: `transition-all duration-300`
+- **Buttons**: `bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800`
+- **Cards**: `bg-white rounded-2xl p-6 border border-gray-200 shadow-lg`
+- **Focus States**: `focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2`
+- **Transitions**: `transition-all duration-300`
 
 ### Accessibility Standards
 
@@ -200,18 +199,25 @@ try {
 #### PDF Handling
 ```typescript
 const extractTextFromPDF = async (file: File): Promise<string> => {
-  // Use PDF.js for text extraction
-  // Handle multi-page documents
-  // Preserve text structure and formatting
+  // Use PDF.js for text extraction and handle multi-page documents
+  const arrayBuffer = await file.arrayBuffer()
+  const pdf = await pdfjsLib.getDocument(arrayBuffer).promise
+  let text = ''
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i)
+    const content = await page.getTextContent()
+    text += content.items.map(item => item.str).join(' ')
+  }
+  return text
 }
 ```
 
 #### URL Content Extraction
 ```typescript
 const extractFromURL = async (url: string): Promise<string> => {
-  // Use Readability.js for content cleaning
-  // Handle different content types
-  // Extract main article content
+  const response = await fetch(`/api/extract?url=${encodeURIComponent(url)}`)
+  const { content } = await response.json()
+  return content // Cleaned with Readability.js on server
 }
 ```
 
@@ -286,12 +292,12 @@ const extractFromURL = async (url: string): Promise<string> => {
 
 ## Common Patterns to Follow
 
-1. **Glass Morphism UI**: Consistent semi-transparent containers with backdrop blur
+1. **Mobile-First PWA Design**: Card-based layouts with native mobile app feel
 2. **Progressive Enhancement**: Web Speech API as base, Hugging Face as enhancement
-3. **Responsive Design**: Mobile-first approach with smooth desktop scaling
+3. **Touch-Optimized Interface**: Large touch targets, gesture-friendly interactions
 4. **Accessible Components**: ARIA labels, keyboard navigation, screen reader support
 5. **Error Recovery**: Graceful fallbacks and clear error messages
-6. **Loading States**: Beautiful loading indicators with progress feedback
+6. **Loading States**: Smooth loading indicators with progress feedback
 7. **PWA Standards**: Offline-first approach with service worker integration
 
 Remember: This is a user-facing application focused on accessibility and beautiful experiences. Every feature should work seamlessly across devices and assistive technologies.
