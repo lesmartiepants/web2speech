@@ -96,7 +96,7 @@ export const useAppStore = create<AppState>((set) => ({
   setTTSEngine: (engine) => set({ ttsEngine: engine }),
   
   // Hugging Face configuration
-  huggingFaceApiKey: localStorage.getItem('huggingface_api_key') || '',
+  huggingFaceApiKey: import.meta.env.VITE_HUGGINGFACE_API_KEY || localStorage.getItem('huggingface_api_key') || '',
   setHuggingFaceApiKey: (apiKey) => {
     localStorage.setItem('huggingface_api_key', apiKey)
     set({ huggingFaceApiKey: apiKey })
