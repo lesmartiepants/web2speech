@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#ffffff">
+    <title>Design Option D — Color Gradient Cards</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { theme: { extend: { colors: { ink:'#0f172a', sky:'#38bdf8', fuchsia:'#d946ef', lime:'#84cc16' } } } }
+    </script>
+    <style>
+      html{color-scheme:light}
+      body{background:linear-gradient(180deg,#fafafa 0%,#ffffff 60%);color:#0f172a;font-family:Inter,system-ui,sans-serif}
+      .blob{position:absolute;filter:blur(60px);opacity:.35}
+      .card{background:#fff;border:1px solid #e5e7eb;border-radius:24px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
+      .seg button.active{background:#0f172a;color:#fff}
+      .field{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px}
+      .btn{border-radius:12px;padding:12px 16px;border:1px solid #e5e7eb}
+      .btn-primary{background:#0f172a;color:#fff}
+    </style>
+  </head>
+  <body>
+    <div class="relative overflow-hidden">
+      <div class="blob w-[380px] h-[380px] rounded-full bg-sky/60 -top-16 -left-16"></div>
+      <div class="blob w-[320px] h-[320px] rounded-full bg-fuchsia/60 top-20 -right-10"></div>
+      <header class="sticky top-0 z-40 backdrop-blur bg-white/70 border-b border-gray-200">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+          <div class="font-extrabold text-xl tracking-tight">Web2Speech</div>
+          <nav class="hidden md:flex gap-6 text-sm text-gray-600"><a href="#input">Input</a><a href="#voices">Voices</a><a href="#preview">Preview</a></nav>
+        </div>
+      </header>
+
+      <main class="relative max-w-6xl mx-auto px-4 py-8 space-y-8">
+        <section class="flex items-end justify-between gap-4">
+          <div>
+            <h1 class="text-4xl md:text-6xl font-black leading-tight">Turn text into audio</h1>
+            <p class="mt-3 text-lg text-gray-600 max-w-2xl">Colorful, modern, and fast. Paste a URL or upload a file to start.</p>
+          </div>
+          <div class="hidden md:block text-right text-sm text-gray-500">PWA • Offline • Fast</div>
+        </section>
+
+        <!-- URL/File segmented toggle -->
+        <div class="seg grid grid-cols-2 gap-2 max-w-md">
+          <button id="d-btn-url" class="btn">URL</button>
+          <button id="d-btn-file" class="btn">File</button>
+        </div>
+
+        <section id="input" class="grid md:grid-cols-2 gap-6">
+          <div id="d-url-card" class="card p-6">
+            <div class="text-xl font-bold mb-3">URL</div>
+            <div class="grid grid-cols-[1fr_auto] gap-3">
+              <input placeholder="https://example.com/article" class="field"/>
+              <button class="btn btn-primary">Extract</button>
+            </div>
+          </div>
+          <div id="d-file-card" class="card p-6">
+            <div class="text-xl font-bold mb-3">File</div>
+            <label class="field h-28 grid place-items-center cursor-pointer">
+              <input id="d-file" type="file" class="hidden"/>
+              <span class="text-gray-600">Drag & drop or browse</span>
+            </label>
+          </div>
+        </section>
+
+        <section id="voices" class="card p-6">
+          <div class="flex items-center justify-between mb-3">
+            <div class="text-xl font-bold">Voice</div>
+            <button class="btn">Test</button>
+          </div>
+          <div class="field text-gray-600">Choose a voice…</div>
+        </section>
+
+        <section id="preview" class="card p-6">
+          <div class="flex items-center justify-between"><div class="text-xl font-bold">Preview</div><div class="text-sm text-gray-600">~3 min • 600 words</div></div>
+          <div class="field mt-3 h-32 overflow-auto text-gray-700">Content snippet…</div>
+        </section>
+
+        <div class="sticky bottom-0 pt-6 bg-gradient-to-t from-white to-transparent">
+          <div class="card p-4 flex items-center justify-between">
+            <div id="d-status" class="text-gray-600">Upload a file to enable Start</div>
+            <div class="flex gap-2">
+              <button id="d-start" disabled class="btn btn-primary opacity-50 cursor-not-allowed">Start</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      (function(){
+        var mode='url';
+        var btnUrl=document.getElementById('d-btn-url');
+        var btnFile=document.getElementById('d-btn-file');
+        var urlCard=document.getElementById('d-url-card');
+        var fileCard=document.getElementById('d-file-card');
+        function update(){
+          urlCard.style.display = mode==='url'?'block':'none';
+          fileCard.style.display = mode==='file'?'block':'none';
+          btnUrl.classList.toggle('active', mode==='url');
+          btnFile.classList.toggle('active', mode==='file');
+        }
+        btnUrl.addEventListener('click',function(){mode='url';update()});
+        btnFile.addEventListener('click',function(){mode='file';update()});
+        update();
+
+        var fileInput=document.getElementById('d-file');
+        var start=document.getElementById('d-start');
+        var status=document.getElementById('d-status');
+        fileInput.addEventListener('change',function(){
+          if(fileInput.files && fileInput.files.length>0){
+            start.disabled=false;
+            start.classList.remove('opacity-50','cursor-not-allowed');
+            status.textContent='File selected — you can Start now';
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
