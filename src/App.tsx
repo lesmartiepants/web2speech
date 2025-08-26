@@ -67,7 +67,7 @@ For high-quality downloadable audio files, select Hugging Face Kokoro-82M as you
 	}
 
 	return (
-		<div id="top" className="min-h-screen">
+		<div id="top" className="min-h-screen theme-option-b">
 			<Header />
 			
 			<main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12 pb-40">
