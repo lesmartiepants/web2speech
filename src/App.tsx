@@ -9,6 +9,8 @@ import ProcessModeSelection from './components/ProcessModeSelection'
 import ReaderView from './components/ReaderView'
 import ErrorDisplay from './components/ErrorDisplay'
 import HuggingFaceTTSService from './services/huggingface'
+import MobileSplash from './components/MobileSplash'
+import { useRef } from 'react'
 
 function App() {
   const { 
@@ -21,6 +23,12 @@ function App() {
     setShowReaderView,
     setError
   } = useAppStore()
+
+  const mainRef = useRef<HTMLDivElement | null>(null)
+
+  const handleGetStarted = () => {
+    mainRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   const handleStartReading = async () => {
     if (processMode === 'stream' && extractedContent.trim()) {
@@ -67,8 +75,10 @@ For high-quality downloadable audio files, select Hugging Face Kokoro-82M as you
   return (
     <div className="min-h-screen">
       <Header />
+
+      <MobileSplash onGetStarted={handleGetStarted} />
       
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+      <main ref={mainRef} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
         {/* Hero Section */}
         <div className="text-center space-y-8">
           <div className="space-y-4">
