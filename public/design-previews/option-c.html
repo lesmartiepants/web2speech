@@ -3,61 +3,108 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#111827">
-    <title>Design Option C — Typographic Reader</title>
+    <meta name="theme-color" content="#0ea5e9">
+    <title>Design Option C — Typographic Reader (Glass Variant)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Newsreader:opsz,wght@6..72,600;6..72,700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: { 400:'#38bdf8',500:'#0ea5e9',600:'#0284c7' },
+              accent: { 400:'#e879f9',500:'#d946ef',600:'#c026d3' },
+              dark: { 800:'#1e293b',900:'#0f172a' }
+            },
+            fontFamily: { sans: ['Inter','system-ui','sans-serif'], display: ['Newsreader','serif'] }
+          }
+        }
+      }
+    </script>
     <style>
-      html{color-scheme:dark} body{margin:0;background:#0b0f14;color:#e5e7eb;font-family:Inter,system-ui,sans-serif}
-      .container{max-width:800px;margin:0 auto;padding:24px}
-      .headline{font-family:Newsreader,serif;font-weight:700;font-size:40px;line-height:1.1;margin:24px 0}
-      .sub{color:#9ca3af;margin-bottom:24px}
-      .card{background:#0e141b;border:1px solid #1f2a37;border-radius:16px;padding:20px}
-      .btn{border-radius:12px;padding:10px 16px;border:1px solid #2a3547;background:#121a25;color:#e5e7eb}
-      .btn-primary{background:#2563eb;border-color:#2563eb}
-      .bar{position:sticky;bottom:0;background:linear-gradient(to top,#0b0f14,transparent);padding:24px 0}
-      .preview{font-size:18px;line-height:1.8;color:#d1d5db}
+      html{color-scheme:dark}
+      body{
+        min-height:100vh;
+        background: radial-gradient(1100px 700px at 10% -10%, rgba(14,165,233,.25), transparent 50%),
+                    radial-gradient(900px 700px at 110% 20%, rgba(217,70,239,.18), transparent 45%),
+                    linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #0f172a 100%);
+        background-attachment: fixed;
+        font-family: Inter, system-ui, sans-serif;
+      }
+      .glass{background:rgba(255,255,255,.10);backdrop-filter:blur(22px);border:1px solid rgba(255,255,255,.18)}
+      .glass-strong{background:rgba(255,255,255,.16);backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,.24)}
+      .prose-quiet p{font-size:18px;line-height:1.85;color:#d1d5db}
+      .btn{border-radius:12px}
+      .btn-primary{background:linear-gradient(90deg,#0ea5e9,#0284c7,#d946ef);color:#fff}
+      .btn-primary:hover{filter:saturate(1.06)}
     </style>
   </head>
-  <body>
-    <div class="container">
-      <header style="display:flex;align-items:center;justify-content:space-between">
-        <div style="font-weight:600">Web2Speech</div>
-        <nav style="display:flex;gap:16px;color:#9ca3af;font-size:14px"><a href="#input">Input</a><a href="#voices">Voices</a><a href="#mode">Mode</a></nav>
-      </header>
+  <body class="text-gray-200">
+    <header class="glass sticky top-0 z-40 border-b border-white/20">
+      <div class="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
+        <div class="font-semibold">Web2Speech</div>
+        <nav class="hidden sm:flex gap-4 text-sm text-gray-300">
+          <a href="#input">Input</a>
+          <a href="#voices">Voices</a>
+          <a href="#mode">Mode</a>
+        </nav>
+      </div>
+    </header>
 
-      <main>
-        <h1 class="headline">A calmer way to listen to what matters</h1>
-        <p class="sub">Clean typography, minimal chrome, and an immersive reader experience—optimized for long-form content.</p>
+    <main class="max-w-4xl mx-auto px-4 py-10 space-y-8">
+      <section class="space-y-3 text-center">
+        <h1 class="font-display text-4xl md:text-5xl font-bold leading-tight text-white">A calmer way to listen</h1>
+        <p class="text-gray-300 max-w-2xl mx-auto">Reader-first layout with glass surfaces and generous whitespace for long-form content.</p>
+      </section>
 
-        <section id="input" class="card" style="margin-bottom:16px">
-          <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center">
-            <input placeholder="https://example.com/article" style="height:44px;background:#0b0f14;border:1px solid #1f2a37;border-radius:10px;padding:0 12px;color:#e5e7eb"/>
-            <button class="btn btn-primary">Extract</button>
-          </div>
-        </section>
-
-        <section id="voices" class="card" style="margin-bottom:16px">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div style="font-weight:600">Voice</div><button class="btn">Test</button></div>
-          <div style="height:44px;background:#0b0f14;border:1px solid #1f2a37;border-radius:10px;padding:0 12px;display:flex;align-items:center;color:#9ca3af">Choose a voice…</div>
-        </section>
-
-        <section id="mode" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-          <button class="card" style="text-align:left"><div style="font-weight:600;margin-bottom:4px">Generate & Download</div><div style="color:#9ca3af">Create audio files for offline listening.</div></button>
-          <button class="card" style="text-align:left"><div style="font-weight:600;margin-bottom:4px">Read & Listen</div><div style="color:#9ca3af">Interactive reader with synced playback.</div></button>
-        </section>
-
-        <section id="preview" class="card">
-          <div style="display:flex;align-items:center;justify-content:space-between;color:#9ca3af;font-size:14px"><div style="font-weight:600;color:#e5e7eb">Preview</div><div>~3 min • 600 words</div></div>
-          <div class="preview" style="margin-top:12px;max-height:180px;overflow:auto">“Typography is the craft of endowing human language with a durable visual form…”</div>
-        </section>
-
-        <div class="bar">
-          <div class="card" style="display:flex;align-items:center;justify-content:space-between">
-            <div style="color:#9ca3af;font-size:14px">Voice: Default • ~3 min</div>
-            <div style="display:flex;gap:8px"><a href="#top" class="btn">Top</a><button class="btn btn-primary">Start</button></div>
-          </div>
+      <section id="input" class="glass-strong rounded-3xl p-6 border border-white/20">
+        <h2 class="text-white font-semibold mb-3">Enter URL</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3">
+          <input placeholder="https://example.com/article" class="w-full bg-white/10 border border-white/20 rounded-xl py-3 px-3 placeholder:text-gray-400" />
+          <button class="btn btn-primary rounded-xl px-4 py-3 font-semibold">Extract</button>
         </div>
-      </main>
+      </section>
+
+      <section id="voices" class="glass-strong rounded-3xl p-6 border border-white/20">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-white font-semibold">Voice</h2>
+          <button class="glass rounded-xl px-3 py-2 text-sm border border-white/20">Test</button>
+        </div>
+        <div class="bg-white/5 rounded-xl border border-white/10 p-3 text-gray-300">Choose a voice…</div>
+      </section>
+
+      <section id="preview" class="glass rounded-3xl p-6 border border-white/20">
+        <div class="flex items-center justify-between mb-4 text-sm text-gray-400">
+          <div class="font-semibold text-white">Preview</div>
+          <div>~3 min • 600 words</div>
+        </div>
+        <div class="prose-quiet space-y-4 max-h-64 overflow-auto">
+          <p>“Typography is the craft of endowing human language with a durable visual form…”</p>
+          <p>Good rhythm, contrast, and spacing improve comprehension during audio-assisted reading.</p>
+        </div>
+      </section>
+
+      <section id="mode" class="grid md:grid-cols-2 gap-4">
+        <button class="glass rounded-2xl p-5 text-left border border-white/20 hover:bg-white/15 transition">
+          <div class="text-white font-semibold mb-1">Generate & Download</div>
+          <div class="text-gray-300 text-sm">Create audio files for offline listening.</div>
+        </button>
+        <button class="glass rounded-2xl p-5 text-left border border-white/20 hover:bg-white/15 transition">
+          <div class="text-white font-semibold mb-1">Read & Listen</div>
+          <div class="text-gray-300 text-sm">Interactive reader with synced playback.</div>
+        </button>
+      </section>
+    </main>
+
+    <div class="sticky bottom-0 bg-gradient-to-t from-dark-900/80 to-transparent py-6">
+      <div class="max-w-4xl mx-auto px-4">
+        <div class="glass-strong rounded-2xl p-4 border border-white/20 flex items-center justify-between">
+          <div class="text-sm text-gray-300">Voice: Default • ~3 min</div>
+          <div class="flex gap-2"><a href="#top" class="glass px-4 py-2 rounded-xl border border-white/20">Top</a><button class="btn btn-primary px-5 py-3 rounded-xl font-semibold">Start</button></div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
