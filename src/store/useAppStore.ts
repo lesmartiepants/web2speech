@@ -29,6 +29,14 @@ export interface AppState {
   extractedContent: string
   setExtractedContent: (content: string) => void
   
+  // Structured article for Reader View
+  articleTitle: string
+  setArticleTitle: (title: string) => void
+  articleByline: string | null
+  setArticleByline: (byline: string | null) => void
+  articleHtml: string
+  setArticleHtml: (html: string) => void
+  
   // Voice state
   selectedVoice: VoiceOption | null
   setSelectedVoice: (voice: VoiceOption | null) => void
@@ -64,8 +72,6 @@ export interface AppState {
   // Reader state
   showReaderView: boolean
   setShowReaderView: (show: boolean) => void
-  currentWordIndex: number
-  setCurrentWordIndex: (index: number) => void
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -84,6 +90,14 @@ export const useAppStore = create<AppState>((set) => ({
   // Content state
   extractedContent: '',
   setExtractedContent: (content) => set({ extractedContent: content }),
+  
+  // Structured article for Reader View
+  articleTitle: '',
+  setArticleTitle: (title) => set({ articleTitle: title }),
+  articleByline: null,
+  setArticleByline: (byline) => set({ articleByline: byline }),
+  articleHtml: '',
+  setArticleHtml: (html) => set({ articleHtml: html }),
   
   // Voice state
   selectedVoice: null,
@@ -123,6 +137,4 @@ export const useAppStore = create<AppState>((set) => ({
   // Reader state
   showReaderView: false,
   setShowReaderView: (show) => set({ showReaderView: show }),
-  currentWordIndex: 0,
-  setCurrentWordIndex: (index) => set({ currentWordIndex: index }),
 }))

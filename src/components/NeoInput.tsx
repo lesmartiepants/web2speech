@@ -1,5 +1,8 @@
 import { useCallback, useState } from 'react'
 import { useAppStore } from '../store/useAppStore'
+import { extractArticleFromUrl } from '../utils/urlExtraction'
+import { extractTextFromPdf } from '../utils/pdfExtraction'
+import DOMPurify from 'dompurify'
 
 export default function NeoInput() {
   const {
@@ -12,7 +15,10 @@ export default function NeoInput() {
     setExtractedContent,
     setIsLoading,
     setError,
-    isLoading
+    isLoading,
+    setArticleTitle,
+    setArticleByline,
+    setArticleHtml,
   } = useAppStore()
 
   const [localUrl, setLocalUrl] = useState(url)
@@ -22,17 +28,18 @@ export default function NeoInput() {
     setIsLoading(true)
     setError(null)
     try {
-      // Simulated extraction
+      const article = await extractArticleFromUrl(localUrl.trim())
       setUrl(localUrl.trim())
-      setTimeout(() => {
-        setExtractedContent(`Sample extracted content from: ${localUrl}`)
-        setIsLoading(false)
-      }, 1200)
+      setExtractedContent(article.text)
+      setArticleTitle(article.title)
+      setArticleByline(article.byline)
+      setArticleHtml(article.html)
     } catch (e) {
-      setError('Failed to extract content from URL.')
+      setError(e instanceof Error ? e.message : 'Failed to extract content from URL.')
+    } finally {
       setIsLoading(false)
     }
-  }, [localUrl, setUrl, setExtractedContent, setIsLoading, setError])
+  }, [localUrl, setUrl, setExtractedContent, setIsLoading, setError, setArticleTitle, setArticleByline, setArticleHtml])
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
@@ -40,19 +47,33 @@ export default function NeoInput() {
     setSelectedFile(file)
     setIsLoading(true)
     setError(null)
+
+    const toArticle = (title: string, text: string) => {
+      const html = text
+        .split(/\n{2,}/)
+        .map(p => p.trim())
+        .filter(Boolean)
+        .map(p => `<p>${p.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>`) 
+        .join('\n')
+      setArticleTitle(title)
+      setArticleByline(null)
+      setArticleHtml(DOMPurify.sanitize(html))
+      setExtractedContent(text)
+    }
+
     if (file.type === 'text/plain') {
       file.text().then(text => {
-        setExtractedContent(text)
+        toArticle(file.name, text)
         setIsLoading(false)
       }).catch(() => {
         setError('Failed to read file content')
         setIsLoading(false)
       })
     } else if (file.type === 'application/pdf') {
-      setTimeout(() => {
-        setExtractedContent(`Simulated text extracted from PDF: ${file.name}`)
-        setIsLoading(false)
-      }, 1200)
+      extractTextFromPdf(file)
+        .then(text => toArticle(file.name, text))
+        .catch(() => setError('Failed to extract text from PDF'))
+        .finally(() => setIsLoading(false))
     } else {
       setIsLoading(false)
       setError('Unsupported file type')
