@@ -35,8 +35,9 @@ jobs:
       - name: Generate screenshot
         run: env SCREENSHOT_PATH=artifacts/ui-preview-${{ github.sha }}.png node scripts/generate-screenshot.js
 
-      - name: Upload artifact
+      - name: Upload screenshot artifact (PNG only)
         uses: actions/upload-artifact@v4
         with:
-          name: ui-preview
-          path: artifacts/
+          name: ui-preview-${{ github.sha }}.png
+          path: artifacts/ui-preview-${{ github.sha }}.png
+          if-no-files-found: error
