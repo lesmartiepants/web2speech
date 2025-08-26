@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#111827">
+    <title>Design Option B — Utilitarian High-Contrast</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { theme: { extend: { colors: { brand: { 500:'#2563eb', 600:'#1d4ed8' } } } } }
+    </script>
+    <style> html{color-scheme:dark} body{background:#0b1220} .card{background:#0e1627;border:1px solid #1f2a44;border-radius:16px}
+      .btn{border-radius:12px} .btn-primary{background:#2563eb} .btn-primary:hover{background:#1d4ed8}
+    </style>
+  </head>
+  <body class="text-gray-200">
+    <header class="sticky top-0 z-40 bg-[#0b1220]/90 backdrop-blur border-b border-[#1f2a44]">
+      <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+        <div class="font-semibold">Web2Speech</div>
+        <nav class="hidden md:flex gap-6 text-sm text-gray-300">
+          <a href="#input">Input</a><a href="#voices">Voices</a><a href="#mode">Mode</a>
+        </nav>
+        <button class="btn px-3 py-2 text-sm border border-[#1f2a44]">Docs</button>
+      </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
+      <section class="flex items-center justify-between gap-4">
+        <div>
+          <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">Convert content to speech</h1>
+          <p class="text-gray-300 mt-2 max-w-xl">A clean, fast, and reliable way to extract content and listen with AI voices.</p>
+        </div>
+        <div class="hidden md:block text-right text-sm text-gray-400">PWA • Offline • Fast</div>
+      </section>
+
+      <section id="input" class="grid md:grid-cols-2 gap-6">
+        <div class="card p-6">
+          <h3 class="font-semibold mb-2">URL</h3>
+          <div class="flex gap-2">
+            <input placeholder="https://example.com/article" class="flex-1 bg-[#0b1220] border border-[#1f2a44] rounded-md px-3 py-3 text-sm"/>
+            <button class="btn btn-primary px-4 py-3 text-sm font-semibold">Extract</button>
+          </div>
+        </div>
+        <div class="card p-6">
+          <h3 class="font-semibold mb-2">File</h3>
+          <div class="border-2 border-dashed border-[#1f2a44] rounded-xl p-8 text-center text-sm text-gray-300">Drag & drop or browse</div>
+        </div>
+      </section>
+
+      <section id="voices" class="card p-6">
+        <div class="flex items-center justify-between">
+          <h3 class="font-semibold">Voice</h3>
+          <button class="btn px-3 py-2 text-sm border border-[#1f2a44]">Test</button>
+        </div>
+        <div class="mt-3 bg-[#0b1220] border border-[#1f2a44] rounded-md px-3 py-3 text-sm text-gray-300">Pick a voice…</div>
+      </section>
+
+      <section id="mode" class="grid md:grid-cols-2 gap-6">
+        <button class="card p-6 text-left hover:bg-[#101a2e] transition">
+          <div class="font-semibold">Generate & Download</div>
+          <div class="text-sm text-gray-300">Create audio files for offline listening.</div>
+        </button>
+        <button class="card p-6 text-left hover:bg-[#101a2e] transition">
+          <div class="font-semibold">Read & Listen</div>
+          <div class="text-sm text-gray-300">Interactive reader with synced playback.</div>
+        </button>
+      </section>
+
+      <section id="preview" class="card p-6">
+        <div class="flex items-center justify-between text-sm">
+          <div class="font-semibold">Preview</div>
+          <div class="text-gray-400">~3 min • 600 words</div>
+        </div>
+        <div class="mt-3 bg-[#0b1220] border border-[#1f2a44] rounded-md p-4 h-28 overflow-auto text-sm text-gray-300">Content snippet…</div>
+      </section>
+
+      <div class="sticky bottom-0 py-6 bg-gradient-to-t from-[#0b1220] to-transparent">
+        <div class="max-w-6xl mx-auto">
+          <div class="card p-4 flex items-center justify-between">
+            <div class="text-sm text-gray-300">Voice: Default • ~3 min</div>
+            <div class="flex gap-2">
+              <a href="#top" class="btn px-4 py-2 border border-[#1f2a44] text-sm">Top</a>
+              <button class="btn btn-primary px-5 py-2.5 text-sm font-semibold">Start</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
