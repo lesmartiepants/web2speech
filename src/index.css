@@ -200,4 +200,13 @@
   .soft-shadow {
     box-shadow: 0 10px 25px rgba(2, 132, 199, 0.15), 0 2px 8px rgba(217, 70, 239, 0.08);
   }
+  .safe-area-bottom {
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    filter: saturate(1.05) contrast(1.05);
+  }
 }

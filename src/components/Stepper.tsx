@@ -18,13 +18,13 @@ export default function Stepper() {
   const completion = [hasContent, hasVoice, hasMode, hasContent]
 
   return (
-    <nav aria-label="Progress" className="glass-morphism rounded-3xl p-4">
-      <ol className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <nav aria-label="Progress" className="glass-morphism rounded-3xl p-4 overflow-x-auto snap-x snap-mandatory">
+      <ol className="flex gap-4 min-w-max md:min-w-0 md:grid md:grid-cols-4">
         {steps.map((step, index) => {
           const Icon = step.icon
           const done = completion[index]
           return (
-            <li key={step.id} className="">
+            <li key={step.id} className="snap-start min-w-[220px] md:min-w-0">
               <a href={`#${step.id}`} className="group block">
                 <div className={`flex items-center gap-3 p-4 rounded-2xl transition-all duration-300 ${
                   done ? 'bg-white/10 border border-white/20 soft-shadow' : 'bg-white/5 border border-white/10 hover:bg-white/10'
