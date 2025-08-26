@@ -9,7 +9,6 @@ import ProcessModeSelection from './components/ProcessModeSelection'
 import ReaderView from './components/ReaderView'
 import ErrorDisplay from './components/ErrorDisplay'
 import HuggingFaceTTSService from './services/huggingface'
-import Stepper from './components/Stepper'
 import ActionBar from './components/ActionBar'
 import DesignTabs from './components/DesignTabs'
 
@@ -101,8 +100,6 @@ For high-quality downloadable audio files, select Hugging Face Kokoro-82M as you
 						</div>
 					</div>
 				</div>
-
-				<Stepper />
 
 				<DesignTabs />
 
