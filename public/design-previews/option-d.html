@@ -4,117 +4,97 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#ffffff">
-    <title>Design Option D — Color Gradient Cards</title>
+    <title>Design Option D — Black + Lime Clean</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      tailwind.config = { theme: { extend: { colors: { ink:'#0f172a', sky:'#38bdf8', fuchsia:'#d946ef', lime:'#84cc16', amber:'#f59e0b' } } } }
+      tailwind.config = { theme: { extend: { colors: { ink:'#0f172a', blackish:'#111827', lime:'#84cc16', grayline:'#e5e7eb' } } } }
     </script>
     <style>
       html{color-scheme:light}
-      body{background:linear-gradient(180deg,#fafafa 0%,#ffffff 60%);color:#0f172a;font-family:Inter,system-ui,sans-serif}
-      .blob{position:absolute;filter:blur(70px);opacity:.35}
-      .blob-b{position:absolute;filter:blur(90px);opacity:.25}
-      .gcard{position:relative;border-radius:26px;padding:2px;background:linear-gradient(135deg,#d946ef 0%,#38bdf8 50%,#84cc16 100%)}
-      .gcard .inner{border-radius:24px;background:#ffffff}
-      .pill{display:inline-flex;border-radius:9999px;gap:8px;padding:6px;background:#ffffff;border:1px solid #e5e7eb}
-      .pill button{border-radius:9999px;padding:10px 16px;border:0;background:transparent;color:#0f172a;font-weight:600}
-      .pill button.active{background:linear-gradient(135deg,#0f172a 0%,#0f172a 100%);color:#fff}
-      .field{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px}
-      .btn{border-radius:14px;padding:12px 16px;border:1px solid #e5e7eb}
-      .btn-primary{border:0;background:linear-gradient(135deg,#d946ef 0%,#38bdf8 60%,#84cc16 100%);color:#fff}
-      .chip{display:inline-flex;align-items:center;gap:6px;border-radius:9999px;padding:6px 10px;background:#ffffff;border:1px solid #e5e7eb;color:#0f172a;font-size:12px}
-      .shadow-soft{box-shadow:0 12px 30px rgba(15,23,42,.08)}
+      body{background:#f9fafb;color:#0f172a;font-family:Inter,system-ui,sans-serif}
+      header{background:#ffffffb3;backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid #e5e7eb}
+      .card{background:#fff;border:2px solid #111827;border-radius:20px;box-shadow:0 6px 0 #111827}
+      .field{background:#fff;border:2px solid #111827;border-radius:12px;padding:14px}
+      .btn{border-radius:12px;padding:12px 16px;border:2px solid #111827}
+      .btn-primary{background:#111827;color:#fff}
+      .btn-primary:disabled{opacity:.5;cursor:not-allowed}
+      .pill{display:inline-flex;border-radius:9999px;border:2px solid #111827;gap:6px;padding:6px;background:#fff}
+      .pill button{border-radius:9999px;padding:10px 16px;border:2px solid transparent;background:#fff;color:#111827;font-weight:700}
+      .pill button.active{background:#111827;color:#fff}
+      .chip{display:inline-flex;align-items:center;gap:8px;border-radius:9999px;padding:6px 10px;border:2px solid #111827;background:#fff;color:#111827;font-size:12px}
+      .dot{width:8px;height:8px;border-radius:9999px;background:#84cc16;display:inline-block}
     </style>
   </head>
   <body>
-    <div class="relative overflow-hidden">
-      <div class="blob w-[420px] h-[420px] rounded-full bg-fuchsia/60 -top-20 -left-24"></div>
-      <div class="blob w-[340px] h-[340px] rounded-full bg-sky/60 top-10 -right-10"></div>
-      <div class="blob-b w-[380px] h-[380px] rounded-full bg-amber/50 top-60 left-1/3"></div>
-      <header class="sticky top-0 z-40 backdrop-blur bg-white/70 border-b border-gray-200">
-        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div class="font-extrabold text-xl tracking-tight">Web2Speech</div>
-          <nav class="hidden md:flex gap-6 text-sm text-gray-600"><a href="#input">Input</a><a href="#voices">Voices</a><a href="#preview">Preview</a></nav>
-        </div>
-      </header>
+    <header class="sticky top-0 z-40">
+      <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+        <div class="font-extrabold text-xl tracking-tight">Web2Speech</div>
+        <nav class="hidden md:flex gap-6 text-sm text-ink"><a href="#input">Input</a><a href="#voices">Voices</a><a href="#preview">Preview</a></nav>
+      </div>
+    </header>
 
-      <main class="relative max-w-6xl mx-auto px-4 py-8 space-y-8">
-        <section class="flex items-end justify-between gap-4">
-          <div>
-            <h1 class="text-4xl md:text-6xl font-black leading-tight">Turn text into audio</h1>
-            <p class="mt-3 text-lg text-gray-600 max-w-2xl">Colorful, modern, and fast. Paste a URL or upload a file to start.</p>
-            <div class="mt-4 flex gap-8">
-              <span class="chip shadow-soft"><span style="width:8px;height:8px;border-radius:9999px;background:#38bdf8;display:inline-block"></span>Realtime</span>
-              <span class="chip shadow-soft"><span style="width:8px;height:8px;border-radius:9999px;background:#d946ef;display:inline-block"></span>Premium Voices</span>
-              <span class="chip shadow-soft"><span style="width:8px;height:8px;border-radius:9999px;background:#84cc16;display:inline-block"></span>Accessible</span>
-            </div>
-          </div>
-          <div class="hidden md:block text-right text-sm text-gray-500">PWA • Offline • Fast</div>
-        </section>
-
-        <!-- URL/File segmented toggle -->
-        <div class="pill w-fit shadow-soft">
-          <button id="d-btn-url" class="active">URL</button>
-          <button id="d-btn-file">File</button>
-        </div>
-
-        <section id="input" class="grid md:grid-cols-2 gap-6">
-          <div id="d-url-card" class="gcard shadow-soft">
-            <div class="inner p-6">
-              <div class="text-xl font-bold mb-3">URL</div>
-              <div class="grid grid-cols-[1fr_auto] gap-3">
-                <input placeholder="https://example.com/article" class="field"/>
-                <button class="btn btn-primary">Extract</button>
-              </div>
-            </div>
-          </div>
-          <div id="d-file-card" class="gcard shadow-soft">
-            <div class="inner p-6">
-              <div class="text-xl font-bold mb-3">File</div>
-              <label class="field h-28 grid place-items-center cursor-pointer">
-                <input id="d-file" type="file" class="hidden"/>
-                <span class="text-gray-600">Drag & drop or browse</span>
-              </label>
-            </div>
-          </div>
-        </section>
-
-        <div class="gcard shadow-soft">
-          <div class="inner p-6">
-            <section id="voices">
-              <div class="flex items-center justify-between mb-3">
-                <div class="text-xl font-bold">Voice</div>
-                <button class="btn">Test</button>
-              </div>
-              <div class="field text-gray-600">Choose a voice…</div>
-            </section>
+    <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
+      <section class="flex items-end justify-between gap-4">
+        <div>
+          <h1 class="text-4xl md:text-6xl font-black leading-tight">Turn text into audio</h1>
+          <p class="mt-3 text-lg text-ink/80 max-w-2xl">Clean, fast, and focused. Paste a URL or upload a file to start.</p>
+          <div class="mt-4 flex gap-8">
+            <span class="chip"><span class="dot"></span>Realtime</span>
+            <span class="chip"><span class="dot" style="background:#84cc16"></span>Accessible</span>
+            <span class="chip"><span class="dot" style="background:#84cc16"></span>Clarity</span>
           </div>
         </div>
+        <div class="hidden md:block text-right text-sm text-ink/70">PWA • Offline • Fast</div>
+      </section>
 
-        <div class="gcard shadow-soft">
-          <div class="inner p-6">
-            <section id="preview">
-              <div class="flex items-center justify-between"><div class="text-xl font-bold">Preview</div><div class="text-sm text-gray-600">~3 min • 600 words</div></div>
-              <div class="field mt-3 h-32 overflow-auto text-gray-700">Content snippet…</div>
-            </section>
+      <!-- URL/File segmented toggle (URL default) -->
+      <div class="pill w-fit">
+        <button id="d-btn-url" class="active">URL</button>
+        <button id="d-btn-file">File</button>
+      </div>
+
+      <section id="input" class="grid md:grid-cols-2 gap-6">
+        <div id="d-url-card" class="card p-6">
+          <div class="text-xl font-bold mb-3">URL</div>
+          <div class="grid grid-cols-[1fr_auto] gap-3">
+            <input placeholder="https://example.com/article" class="field"/>
+            <button class="btn btn-primary">Extract</button>
           </div>
         </div>
+        <div id="d-file-card" class="card p-6">
+          <div class="text-xl font-bold mb-3">File</div>
+          <label class="field h-28 grid place-items-center cursor-pointer bg-white">
+            <input id="d-file" type="file" class="hidden"/>
+            <span class="text-ink/80">Drag & drop or browse</span>
+          </label>
+        </div>
+      </section>
 
-        <div class="sticky bottom-0 pt-6 bg-gradient-to-t from-white to-transparent">
-          <div class="gcard shadow-soft">
-            <div class="inner p-4 flex items-center justify-between">
-              <div id="d-status" class="text-gray-600">Upload a file to enable Start</div>
-              <div class="flex gap-2">
-                <button id="d-start" disabled class="btn btn-primary opacity-50 cursor-not-allowed">Start</button>
-              </div>
-            </div>
+      <section id="voices" class="card p-6">
+        <div class="flex items-center justify-between mb-3">
+          <div class="text-xl font-bold">Voice</div>
+          <button class="btn">Test</button>
+        </div>
+        <div class="field text-ink/80">Choose a voice…</div>
+      </section>
+
+      <section id="preview" class="card p-6">
+        <div class="flex items-center justify-between"><div class="text-xl font-bold">Preview</div><div class="text-sm text-ink/70">~3 min • 600 words</div></div>
+        <div class="field mt-3 h-32 overflow-auto text-ink">Content snippet…</div>
+      </section>
+
+      <div class="sticky bottom-0 pt-6 bg-gradient-to-t from-[#f9fafb] to-transparent">
+        <div class="card p-4 flex items-center justify-between">
+          <div id="d-status" class="text-ink/80">Upload a file to enable Start</div>
+          <div class="flex gap-2">
+            <button id="d-start" disabled class="btn btn-primary">Start</button>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
 
     <script>
       (function(){
@@ -139,7 +119,6 @@
         fileInput.addEventListener('change',function(){
           if(fileInput.files && fileInput.files.length>0){
             start.disabled=false;
-            start.classList.remove('opacity-50','cursor-not-allowed');
             status.textContent='File selected — you can Start now';
           }
         });
