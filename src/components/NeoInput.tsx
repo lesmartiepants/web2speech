@@ -1,7 +1,8 @@
 import { useCallback, useState } from 'react'
 import { useAppStore } from '../store/useAppStore'
-import { extractTextFromUrl } from '../utils/urlExtraction'
+import { extractArticleFromUrl } from '../utils/urlExtraction'
 import { extractTextFromPdf } from '../utils/pdfExtraction'
+import DOMPurify from 'dompurify'
 
 export default function NeoInput() {
   const {
@@ -14,7 +15,10 @@ export default function NeoInput() {
     setExtractedContent,
     setIsLoading,
     setError,
-    isLoading
+    isLoading,
+    setArticleTitle,
+    setArticleByline,
+    setArticleHtml,
   } = useAppStore()
 
   const [localUrl, setLocalUrl] = useState(url)
@@ -24,15 +28,18 @@ export default function NeoInput() {
     setIsLoading(true)
     setError(null)
     try {
-      const text = await extractTextFromUrl(localUrl.trim())
+      const article = await extractArticleFromUrl(localUrl.trim())
       setUrl(localUrl.trim())
-      setExtractedContent(text)
+      setExtractedContent(article.text)
+      setArticleTitle(article.title)
+      setArticleByline(article.byline)
+      setArticleHtml(article.html)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to extract content from URL.')
     } finally {
       setIsLoading(false)
     }
-  }, [localUrl, setUrl, setExtractedContent, setIsLoading, setError])
+  }, [localUrl, setUrl, setExtractedContent, setIsLoading, setError, setArticleTitle, setArticleByline, setArticleHtml])
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
@@ -41,9 +48,22 @@ export default function NeoInput() {
     setIsLoading(true)
     setError(null)
 
+    const toArticle = (title: string, text: string) => {
+      const html = text
+        .split(/\n{2,}/)
+        .map(p => p.trim())
+        .filter(Boolean)
+        .map(p => `<p>${p.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>`) 
+        .join('\n')
+      setArticleTitle(title)
+      setArticleByline(null)
+      setArticleHtml(DOMPurify.sanitize(html))
+      setExtractedContent(text)
+    }
+
     if (file.type === 'text/plain') {
       file.text().then(text => {
-        setExtractedContent(text)
+        toArticle(file.name, text)
         setIsLoading(false)
       }).catch(() => {
         setError('Failed to read file content')
@@ -51,7 +71,7 @@ export default function NeoInput() {
       })
     } else if (file.type === 'application/pdf') {
       extractTextFromPdf(file)
-        .then(text => setExtractedContent(text))
+        .then(text => toArticle(file.name, text))
         .catch(() => setError('Failed to extract text from PDF'))
         .finally(() => setIsLoading(false))
     } else {
