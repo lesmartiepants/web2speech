@@ -2,14 +2,19 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="refresh" content="0; url=/web2speech/">
     <script>
-      // Client-side fallback for SPA deep links
-      var path = location.pathname.replace(/^\//, '');
-      var base = '/web2speech/';
-      if (!location.pathname.startsWith(base)) {
-        location.replace(base + (path ? ('#/' + path) : ''));
-      }
+      (function() {
+        // Derive base from current path (for GitHub Pages repo subpath) or Vite base if embedded
+        var segments = location.pathname.split('/').filter(Boolean);
+        // If served from user.github.io/repo, base is '/repo/'
+        var base = segments.length > 0 ? ('/' + segments[0] + '/') : '/';
+        // If already at the base index, just go there
+        var dest = base;
+        // Preserve the intended path via hash for SPA routers without server rewrite
+        var path = location.pathname.replace(base, '');
+        if (path) dest = base + '#/' + path + (location.search || '') + (location.hash || '');
+        location.replace(dest);
+      })();
     </script>
     <title>Redirecting…</title>
   </head>
