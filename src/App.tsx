@@ -11,6 +11,7 @@ import ErrorDisplay from './components/ErrorDisplay'
 import HuggingFaceTTSService from './services/huggingface'
 import Stepper from './components/Stepper'
 import ActionBar from './components/ActionBar'
+import DesignTabs from './components/DesignTabs'
 
 function App() {
 	const { 
@@ -102,6 +103,8 @@ For high-quality downloadable audio files, select Hugging Face Kokoro-82M as you
 				</div>
 
 				<Stepper />
+
+				<DesignTabs />
 
 				<ErrorDisplay />
 				
