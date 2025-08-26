@@ -32,17 +32,24 @@
         <h1 class="title">Listen better with beautiful typography</h1>
         <p class="sub">Focused reading with large, comfortable text and minimal chrome for long-form content.</p>
 
-        <section id="input" class="card" style="margin-bottom:16px">
-          <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center">
-            <input placeholder="https://example.com/article" class="field"/>
-            <button class="btn btn-primary">Extract</button>
-          </div>
-          <p class="muted" style="margin-top:8px">or upload a file below</p>
-        </section>
+        <!-- URL/File segmented toggle -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:360px;margin:8px 0 12px 0">
+          <button id="c-btn-url" class="btn">URL</button>
+          <button id="c-btn-file" class="btn">File</button>
+        </div>
 
-        <section class="card" style="margin-bottom:16px">
-          <div style="font-weight:600;margin-bottom:8px">File Upload</div>
-          <div style="height:120px;border:1px dashed #2a3547;border-radius:12px;display:grid;place-items:center;color:#a1a1aa">Drag & drop or click</div>
+        <section id="input" class="card" style="margin-bottom:16px">
+          <div id="c-url-card" style="display:block">
+            <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center">
+              <input placeholder="https://example.com/article" class="field"/>
+              <button class="btn btn-primary">Extract</button>
+            </div>
+            <p class="muted" style="margin-top:8px">or upload a file</p>
+          </div>
+          <div id="c-file-card" style="display:none">
+            <div style="font-weight:600;margin-bottom:8px">File Upload</div>
+            <div style="height:120px;border:1px dashed #2a3547;border-radius:12px;display:grid;place-items:center;color:#a1a1aa">Drag & drop or click</div>
+          </div>
         </section>
 
         <section id="voices" class="card" style="margin-bottom:16px">
@@ -69,4 +76,22 @@
       </main>
     </div>
   </body>
+  <script>
+    (function(){
+      var mode='url';
+      var btnUrl=document.getElementById('c-btn-url');
+      var btnFile=document.getElementById('c-btn-file');
+      var urlCard=document.getElementById('c-url-card');
+      var fileCard=document.getElementById('c-file-card');
+      function update(){
+        urlCard.style.display= mode==='url'?'block':'none';
+        fileCard.style.display= mode==='file'?'block':'none';
+        btnUrl.style.opacity = mode==='url'? '1':'0.7';
+        btnFile.style.opacity = mode==='file'? '1':'0.7';
+      }
+      btnUrl.addEventListener('click',function(){mode='url';update()});
+      btnFile.addEventListener('click',function(){mode='file';update()});
+      update();
+    })();
+  </script>
 </html>

@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#0ea5e9">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Design Option A — Compact App</title>
+    <title>Design Option A — Glass Gradient App</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -15,109 +15,223 @@
       tailwind.config = {
         theme: {
           extend: {
-            colors: { primary:{500:'#0ea5e9',600:'#0284c7'}, accent:{500:'#d946ef'} },
-            fontFamily: { sans: ['Inter','system-ui','sans-serif'] }
+            colors: {
+              primary: { 400:'#38bdf8',500:'#0ea5e9',600:'#0284c7' },
+              accent: { 400:'#e879f9',500:'#d946ef',600:'#c026d3' },
+              dark: { 800:'#1e293b',900:'#0f172a' }
+            },
+            fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
           }
         }
       }
     </script>
     <style>
-      html{color-scheme:dark}
-      body{min-height:100vh;background:linear-gradient(135deg,#0f172a 0%,#1e293b 40%,#0f172a 100%);background-attachment:fixed;font-family:Inter,system-ui,sans-serif}
-      .glass{background:rgba(255,255,255,.08);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.16)}
-      .glass-strong{background:rgba(255,255,255,.14);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.22)}
-      .btn-primary{background:linear-gradient(90deg,#0ea5e9,#0284c7,#d946ef);color:#fff;border-radius:12px}
-      .pane{display:grid;grid-template-columns:1fr;gap:16px}
-      @media (min-width: 1024px){.pane{grid-template-columns:1.1fr .9fr}}
+      html { color-scheme: dark; }
+      body {
+        min-height: 100vh;
+        background: radial-gradient(1200px 800px at 10% -10%, rgba(14,165,233,.25), transparent 50%),
+                    radial-gradient(900px 700px at 110% 20%, rgba(217,70,239,.20), transparent 45%),
+                    linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #0f172a 100%);
+        background-attachment: fixed;
+        font-family: Inter, system-ui, sans-serif;
+      }
+      .glass { background: rgba(255,255,255,.08); backdrop-filter: blur(18px); border: 1px solid rgba(255,255,255,.16); }
+      .glass-strong { background: rgba(255,255,255,.14); backdrop-filter: blur(28px); border: 1px solid rgba(255,255,255,.22); }
+      .btn-primary { position: relative; background: linear-gradient(90deg,#0ea5e9,#0284c7,#d946ef); color:#fff; border-radius: 1rem; box-shadow: 0 18px 40px rgba(14,165,233,.25),0 8px 20px rgba(217,70,239,.15); }
+      .btn-primary:hover{ transform: translateY(-1px); filter: saturate(1.06); }
+      .edge-fade { mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
+      .segmented button.active{ background-color: rgba(255,255,255,.20); border-color: rgba(255,255,255,.30); color: #fff; }
     </style>
   </head>
   <body class="text-gray-200">
     <header class="glass sticky top-0 z-40 border-b border-white/20">
-      <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 grid place-items-center text-xs font-bold">W2S</div>
-          <div class="font-semibold">Web2Speech</div>
+          <div class="relative w-10 h-10 rounded-xl bg-gradient-to-br from-primary-400 via-accent-500 to-primary-600 grid place-items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5H6a2 2 0 0 0-2 2v5"/><path d="m14 7 3-3 3 3"/><path d="M17 4v16"/><rect x="2" y="13" width="8" height="8" rx="2"/></svg>
+          </div>
+          <div>
+            <p class="text-white font-bold">Web2Speech</p>
+            <p class="text-xs text-gray-400">AI Text-to-Speech</p>
+          </div>
         </div>
-        <div class="text-xs text-gray-400 hidden sm:block">PWA • Offline • Fast</div>
+        <button class="glass rounded-xl px-3 py-2 text-sm">Sign in</button>
       </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-6 space-y-4">
-      <!-- Compact header row instead of big hero -->
-      <section class="glass rounded-2xl p-4 border border-white/20 flex items-center justify-between">
-        <div class="text-sm text-gray-300">Convert content to high‑quality speech</div>
-        <div class="flex gap-2">
-          <button class="glass rounded-xl px-3 py-2 border border-white/20 text-sm">Docs</button>
-          <button class="btn-primary px-3 py-2 text-sm font-semibold">Start</button>
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+      <!-- Hero -->
+      <section class="text-center space-y-5">
+        <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">
+          <span class="bg-gradient-to-r from-primary-400 via-accent-400 to-primary-500 bg-clip-text text-transparent">Turn Content</span>
+          <span class="block text-white">into Beautiful Speech</span>
+        </h1>
+        <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">Paste a URL or upload a file, pick a voice, and get a synchronized, elegant listening experience.</p>
+        <div class="flex justify-center gap-3 text-gray-400 text-sm">
+          <span class="inline-flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary-400 animate-pulse"></span>Realtime</span>
+          <span>•</span>
+          <span class="inline-flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-accent-400 animate-pulse"></span>Premium Voices</span>
+          <span>•</span>
+          <span>Accessible</span>
         </div>
       </section>
 
-      <section class="pane">
-        <!-- Left: Inputs and controls -->
-        <div class="space-y-4">
-          <div class="glass-strong rounded-2xl p-5 border border-white/20">
-            <div class="text-white font-semibold mb-2">Input</div>
-            <div class="grid grid-cols-1 xl:grid-cols-[1fr_auto] gap-3">
-              <input placeholder="https://example.com/article" class="w-full bg-white/10 border border-white/20 rounded-xl py-3 px-3 placeholder:text-gray-400"/>
-              <button class="btn-primary px-4 py-3 rounded-xl font-semibold">Extract</button>
-            </div>
-            <div class="mt-3 text-xs text-gray-400">or upload a file below</div>
-          </div>
+      <!-- Stepper -->
+      <nav class="glass rounded-3xl p-4 overflow-x-auto snap-x snap-mandatory edge-fade">
+        <ol class="flex gap-3 min-w-max md:grid md:grid-cols-4 md:min-w-0">
+          <li class="snap-start min-w-[220px] md:min-w-0">
+            <a href="#input" class="block">
+              <div class="flex items-center gap-3 p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10">
+                <div class="w-10 h-10 rounded-xl bg-white/10 grid place-items-center">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18"/><path d="M3 6h18"/><path d="M3 18h18"/></svg>
+                </div>
+                <div class="flex-1">
+                  <p class="text-sm font-semibold">Input</p>
+                  <div class="h-1 bg-white/10 rounded-full mt-1 overflow-hidden">
+                    <div class="h-full w-[30%] bg-white/20 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li class="snap-start min-w-[220px] md:min-w-0">
+            <a href="#voices" class="block">
+              <div class="flex items-center gap-3 p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10">
+                <div class="w-10 h-10 rounded-xl bg-white/10 grid place-items-center">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 22v-6"/><path d="M19 14v6"/><path d="M9 8v14"/><path d="M15 12v10"/></svg>
+                </div>
+                <div class="flex-1">
+                  <p class="text-sm font-semibold">Voice</p>
+                  <div class="h-1 bg-white/10 rounded-full mt-1 overflow-hidden">
+                    <div class="h-full w-[30%] bg-white/20 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li class="snap-start min-w-[220px] md:min-w-0">
+            <a href="#mode" class="block">
+              <div class="flex items-center gap-3 p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10">
+                <div class="w-10 h-10 rounded-xl bg-white/10 grid place-items-center">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m8 12 3 3 5-5"/><rect x="2" y="3" width="20" height="14" rx="2"/></svg>
+                </div>
+                <div class="flex-1">
+                  <p class="text-sm font-semibold">Mode</p>
+                  <div class="h-1 bg-white/10 rounded-full mt-1 overflow-hidden">
+                    <div class="h-full w-[30%] bg-white/20 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li class="snap-start min-w-[220px] md:min-w-0">
+            <a href="#preview" class="block">
+              <div class="flex items-center gap-3 p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10">
+                <div class="w-10 h-10 rounded-xl bg-white/10 grid place-items-center">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                </div>
+                <div class="flex-1">
+                  <p class="text-sm font-semibold">Preview</p>
+                  <div class="h-1 bg-white/10 rounded-full mt-1 overflow-hidden">
+                    <div class="h-full w-[30%] bg-white/20 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </li>
+        </ol>
+      </nav>
 
-          <div class="glass rounded-2xl p-5 border border-white/20">
-            <div class="text-white font-semibold mb-2">File Upload</div>
-            <div class="border border-dashed border-white/20 rounded-xl h-28 grid place-items-center text-gray-300">Drag & drop or click</div>
-          </div>
+      <!-- URL/File toggle -->
+      <div class="glass rounded-3xl p-4 border border-white/20 segmented flex items-center gap-2 w-full max-w-md mx-auto">
+        <button id="btn-url" class="px-4 py-2 rounded-xl border border-white/10 text-sm font-semibold">URL</button>
+        <button id="btn-file" class="px-4 py-2 rounded-xl border border-white/10 text-sm font-semibold">File</button>
+      </div>
 
-          <div class="glass rounded-2xl p-5 border border-white/20">
-            <div class="flex items-center justify-between">
-              <div class="text-white font-semibold">Voice</div>
-              <button class="glass rounded-xl px-3 py-2 text-sm border border-white/20">Test</button>
-            </div>
-            <div class="mt-3 bg-white/5 rounded-xl border border-white/10 p-3 text-gray-300">Choose a voice…</div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-3">
-            <button class="glass rounded-xl p-4 text-left border border-white/20 hover:bg-white/15 transition">
-              <div class="text-white font-semibold">Generate & Download</div>
-              <div class="text-gray-300 text-sm">Create files for offline listening.</div>
-            </button>
-            <button class="glass rounded-xl p-4 text-left border border-white/20 hover:bg-white/15 transition">
-              <div class="text-white font-semibold">Read & Listen</div>
-              <div class="text-gray-300 text-sm">Interactive reader with sync.</div>
-            </button>
+      <!-- Cards -->
+      <section id="input" class="grid gap-6 md:grid-cols-2">
+        <div id="url-card" class="glass-strong rounded-3xl p-6 border border-white/20">
+          <h3 class="text-white font-bold text-lg mb-2">Web Content Extraction</h3>
+          <p class="text-gray-300 text-sm mb-4">Enter any website URL to extract readable content.</p>
+          <div class="relative">
+            <input placeholder="https://example.com/article" class="w-full bg-white/10 border border-white/20 rounded-2xl py-4 pl-4 pr-20 placeholder:text-gray-400"/>
+            <button class="absolute right-2 top-1/2 -translate-y-1/2 btn-primary px-4 py-2 text-sm rounded-xl">Extract</button>
           </div>
         </div>
-
-        <!-- Right: Preview and details -->
-        <div class="space-y-4">
-          <div class="glass-strong rounded-2xl p-5 border border-white/20">
-            <div class="flex items-center justify-between mb-3 text-sm text-gray-400">
-              <div class="text-white font-semibold">Preview</div>
-              <div>~3 min • 600 words</div>
-            </div>
-            <div class="bg-white/5 rounded-xl border border-white/10 p-4 h-56 overflow-auto text-gray-300">Lorem ipsum dolor sit amet, consectetur adipiscing elit…</div>
+        <div id="file-card" class="glass-strong rounded-3xl p-6 border border-white/20">
+          <h3 class="text-white font-bold text-lg mb-2">File Upload</h3>
+          <p class="text-gray-300 text-sm mb-4">Upload PDFs and text documents.</p>
+          <div class="border-2 border-dashed border-white/20 rounded-3xl p-10 text-center">
+            <p class="text-gray-300">Drag & drop or click to browse</p>
           </div>
+        </div>
+      </section>
 
-          <div class="glass rounded-2xl p-4 border border-white/20 text-sm text-gray-300">
-            <div class="flex items-center justify-between"><span>Selected Voice</span><span>Default</span></div>
-            <div class="flex items-center justify-between"><span>Quality</span><span>High</span></div>
-            <div class="flex items-center justify-between"><span>Format</span><span>MP3</span></div>
-          </div>
+      <section id="voices" class="glass-strong rounded-3xl p-6 border border-white/20">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-white font-bold text-lg">Voice Selection</h3>
+          <button class="glass rounded-xl px-3 py-2 text-sm">Test Voice</button>
+        </div>
+        <div class="bg-white/5 rounded-2xl border border-white/10 p-4 text-gray-300">Choose a voice…</div>
+      </section>
+
+      <section id="mode" class="grid gap-6 md:grid-cols-2">
+        <button class="glass rounded-3xl p-6 text-left border border-white/20 hover:bg-white/10">
+          <p class="text-white font-bold text-lg mb-1">Generate & Download</p>
+          <p class="text-gray-300 text-sm">Create high-quality audio files for offline listening.</p>
+        </button>
+        <button class="glass rounded-3xl p-6 text-left border border-white/20 hover:bg-white/10">
+          <p class="text-white font-bold text-lg mb-1">Read & Listen</p>
+          <p class="text-gray-300 text-sm">Immersive reader with synchronized audio playback.</p>
+        </button>
+      </section>
+
+      <section id="preview" class="glass-strong rounded-3xl p-6 border border-white/20">
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-white font-bold">Content Preview</p>
+          <p class="text-gray-400 text-sm">~3 min • 600 words</p>
+        </div>
+        <div class="bg-white/5 rounded-2xl border border-white/10 p-4 text-gray-300 h-32 overflow-auto">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit…
         </div>
       </section>
     </main>
 
+    <!-- Action Bar -->
     <div class="fixed inset-x-0 bottom-0 z-40">
-      <div class="max-w-6xl mx-auto px-4 pb-5" style="padding-bottom: calc(env(safe-area-inset-bottom,0px) + 1rem)">
-        <div class="glass-strong rounded-2xl border border-white/20 p-3 flex items-center justify-between">
-          <div class="text-sm text-gray-300">Voice: Default • ~3 min</div>
-          <div class="flex gap-2">
-            <a href="#top" class="glass px-4 py-2 rounded-xl border border-white/20 text-sm">Top</a>
-            <button class="btn-primary px-5 py-3 rounded-xl font-semibold">Start</button>
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-6" style="padding-bottom: calc(env(safe-area-inset-bottom,0px) + 1rem)">
+        <div class="glass-strong rounded-3xl border border-white/20 p-3">
+          <div class="flex flex-col md:flex-row md:items-center gap-3">
+            <div class="flex-1">
+              <p class="text-white font-semibold">Start Reading Experience</p>
+              <p class="text-gray-300 text-sm">Voice: Default • ~3 min</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <a href="#top" class="glass px-4 py-3 rounded-2xl text-sm">Top</a>
+              <button class="btn-primary px-6 py-4 rounded-2xl font-bold">Start</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
+    <script>
+      (function(){
+        var mode = 'url';
+        var btnUrl = document.getElementById('btn-url');
+        var btnFile = document.getElementById('btn-file');
+        var urlCard = document.getElementById('url-card');
+        var fileCard = document.getElementById('file-card');
+        function update(){
+          urlCard.style.display = mode === 'url' ? 'block' : 'none';
+          fileCard.style.display = mode === 'file' ? 'block' : 'none';
+          btnUrl.classList.toggle('active', mode === 'url');
+          btnFile.classList.toggle('active', mode === 'file');
+        }
+        btnUrl.addEventListener('click', function(){ mode='url'; update(); });
+        btnFile.addEventListener('click', function(){ mode='file'; update(); });
+        update();
+      })();
+    </script>
   </body>
 </html>
