@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#0b0f14">
+    <title>Design Option C — Ultra‑Typographic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:opsz,wght@6..72,700&display=swap" rel="stylesheet">
+    <style>
+      html{color-scheme:dark}
+      body{margin:0;background:#0b0f14;color:#e5e7eb;font-family:Inter,system-ui,sans-serif}
+      .wrap{max-width:820px;margin:0 auto;padding:24px}
+      .title{font-family:Newsreader,serif;font-weight:700;font-size:48px;line-height:1.05;margin:24px 0;color:#f3f4f6}
+      .sub{color:#a1a1aa;margin-bottom:24px;font-size:18px}
+      .card{background:#0f131a;border:1px solid #1f2a37;border-radius:20px;padding:20px}
+      .field{background:#0b0f14;border:1px solid #1f2a37;border-radius:12px;height:48px;padding:0 14px;color:#e5e7eb}
+      .btn{border-radius:12px;padding:12px 16px;border:1px solid #2a3547;background:#121a25;color:#e5e7eb}
+      .btn-primary{background:#2563eb;border-color:#2563eb}
+      .muted{color:#9ca3af;font-size:14px}
+      .preview{font-size:20px;line-height:1.9;color:#e5e7eb}
+      .bar{position:sticky;bottom:0;background:linear-gradient(to top,#0b0f14,transparent);padding:24px 0}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header style="display:flex;align-items:center;justify-content:space-between">
+        <div style="font-weight:600">Web2Speech</div>
+        <nav style="display:flex;gap:16px" class="muted"><a href="#input">Input</a><a href="#voices">Voices</a><a href="#mode">Mode</a></nav>
+      </header>
+
+      <main>
+        <h1 class="title">Listen better with beautiful typography</h1>
+        <p class="sub">Focused reading with large, comfortable text and minimal chrome for long-form content.</p>
+
+        <!-- URL/File segmented toggle -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:360px;margin:8px 0 12px 0">
+          <button id="c-btn-url" class="btn">URL</button>
+          <button id="c-btn-file" class="btn">File</button>
+        </div>
+
+        <section id="input" class="card" style="margin-bottom:16px">
+          <div id="c-url-card" style="display:block">
+            <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center">
+              <input placeholder="https://example.com/article" class="field"/>
+              <button class="btn btn-primary">Extract</button>
+            </div>
+            <p class="muted" style="margin-top:8px">or upload a file</p>
+          </div>
+          <div id="c-file-card" style="display:none">
+            <div style="font-weight:600;margin-bottom:8px">File Upload</div>
+            <div style="height:120px;border:1px dashed #2a3547;border-radius:12px;display:grid;place-items:center;color:#a1a1aa">Drag & drop or click</div>
+          </div>
+        </section>
+
+        <section id="voices" class="card" style="margin-bottom:16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div style="font-weight:600;font-size:18px">Voice</div><button class="btn">Test</button></div>
+          <div class="field" style="display:flex;align-items:center;height:44px">Choose a voice…</div>
+        </section>
+
+        <section id="mode" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0">
+          <button class="card" style="text-align:left"><div style="font-weight:600;margin-bottom:4px;font-size:18px">Generate & Download</div><div class="muted">Create audio files for offline listening.</div></button>
+          <button class="card" style="text-align:left"><div style="font-weight:600;margin-bottom:4px;font-size:18px">Read & Listen</div><div class="muted">Interactive reader with synced playback.</div></button>
+        </section>
+
+        <section id="preview" class="card" style="margin-bottom:16px">
+          <div style="display:flex;align-items:center;justify-content:space-between" class="muted"><div style="font-weight:600;color:#e5e7eb">Preview</div><div>~3 min • 600 words</div></div>
+          <div class="preview" style="margin-top:14px;max-height:240px;overflow:auto">“Typography is the craft of endowing human language with a durable visual form…”</div>
+        </section>
+
+        <div class="bar">
+          <div class="card" style="display:flex;align-items:center;justify-content:space-between">
+            <div id="c-status" class="muted">Upload a file to enable Start</div>
+            <div style="display:flex;gap:10px"><button id="c-start" disabled class="btn btn-primary" style="opacity:.5;cursor:not-allowed">Start</button></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+  <script>
+    (function(){
+      var mode='url';
+      var btnUrl=document.getElementById('c-btn-url');
+      var btnFile=document.getElementById('c-btn-file');
+      var urlCard=document.getElementById('c-url-card');
+      var fileCard=document.getElementById('c-file-card');
+      function update(){
+        urlCard.style.display= mode==='url'?'block':'none';
+        fileCard.style.display= mode==='file'?'block':'none';
+        btnUrl.style.opacity = mode==='url'? '1':'0.7';
+        btnFile.style.opacity = mode==='file'? '1':'0.7';
+      }
+      btnUrl.addEventListener('click',function(){mode='url';update()});
+      btnFile.addEventListener('click',function(){mode='file';update()});
+      update();
+
+      var fileInput=document.createElement('input');
+      fileInput.type='file';
+      // Lightweight gating: attach to file card click
+      fileCard.addEventListener('click',function(){
+        fileInput.click();
+      });
+      var start=document.getElementById('c-start');
+      var status=document.getElementById('c-status');
+      fileInput.addEventListener('change',function(){
+        if(fileInput.files && fileInput.files.length>0){
+          start.disabled=false;
+          start.style.opacity='1';
+          start.style.cursor='pointer';
+          status.textContent='File selected — you can Start now';
+        }
+      });
+    })();
+  </script>
+</html>

@@ -8,6 +8,8 @@
 @layer base {
   html {
     font-family: Inter, system-ui, sans-serif;
+    color-scheme: dark;
+    scroll-behavior: smooth;
   }
   
   body {
@@ -44,23 +46,69 @@
       transform: scale(1.1) rotate(180deg);
     }
   }
+
+  ::selection {
+    background: rgba(14, 165, 233, 0.35);
+    color: white;
+  }
+
+  * {
+    scrollbar-gutter: stable both-edges;
+  }
+
+  /* Global scrollbars */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(14,165,233,0.6), rgba(217,70,239,0.6));
+    border-radius: 9999px;
+    border: 2px solid rgba(255,255,255,0.15);
+  }
 }
 
 @layer components {
   .glass-morphism {
-    @apply bg-white/10 backdrop-blur-xl border border-white/20;
+    background: rgba(255, 255, 255, 0.10);
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.20);
   }
   
   .glass-morphism-strong {
-    @apply bg-white/20 backdrop-blur-2xl border border-white/30;
+    background: rgba(255, 255, 255, 0.20);
+    -webkit-backdrop-filter: blur(40px);
+    backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.30);
   }
   
   .gradient-text {
-    @apply bg-gradient-to-r from-primary-400 via-accent-400 to-primary-500 bg-clip-text text-transparent;
+    background-image: linear-gradient(90deg, #38bdf8, #e879f9, #0ea5e9);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
   
   .btn-primary {
-    @apply bg-gradient-to-r from-primary-500 via-primary-600 to-accent-500 text-white font-semibold py-3 px-6 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 hover:from-primary-600 hover:via-primary-700 hover:to-accent-600;
+    position: relative;
+    background-image: linear-gradient(90deg, #0ea5e9, #0284c7, #d946ef);
+    color: #ffffff;
+    font-weight: 600;
+    border-radius: 1rem;
+    box-shadow: 0 20px 40px rgba(14, 165, 233, 0.25), 0 8px 20px rgba(217, 70, 239, 0.15);
+    transition: all 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 30px 60px rgba(14, 165, 233, 0.35), 0 10px 25px rgba(217, 70, 239, 0.20);
+    filter: saturate(1.08);
   }
   
   .btn-primary::before {
@@ -70,7 +118,9 @@
     padding: 2px;
     background: linear-gradient(45deg, #0ea5e9, #d946ef, #0ea5e9);
     border-radius: inherit;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
     mask-composite: exclude;
     animation: borderGlow 3s linear infinite;
   }
@@ -108,4 +158,153 @@
     box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
     transition: all 0.3s ease;
   }
+
+  /* Make typography look great on dark background by default */
+  .prose {
+    color: #e2e8f0;
+  }
+  .prose a {
+    color: #38bdf8;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s ease;
+  }
+  .prose a:hover {
+    color: #7dd3fc;
+  }
+
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.10);
+    color: #e5e7eb;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    transition: all 0.2s ease;
+  }
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.16);
+    transform: translateY(-1px);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: #e5e7eb;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: all 0.2s ease;
+  }
+  .btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.24);
+  }
+}
+
+@layer utilities {
+  .soft-shadow {
+    box-shadow: 0 10px 25px rgba(2, 132, 199, 0.15), 0 2px 8px rgba(217, 70, 239, 0.08);
+  }
+  .safe-area-bottom {
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    filter: saturate(1.05) contrast(1.05);
+  }
+}
+
+/* Option B theme (light neo-brutalist) */
+.theme-option-b {
+  background: #f8fafc;
+}
+
+.theme-option-b .glass-morphism,
+.theme-option-b .glass-morphism-strong {
+  background: #ffffff !important;
+  backdrop-filter: none !important;
+  border: 3px solid #111827 !important;
+  border-radius: 20px !important;
+  box-shadow: 6px 6px 0 #111827 !important;
+}
+
+.theme-option-b .btn-primary {
+  background: #111827 !important;
+  color: #ffffff !important;
+  border: 3px solid #111827 !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+.theme-option-b .btn-ghost {
+  background: #ffffff !important;
+  color: #111827 !important;
+  border: 3px solid #111827 !important;
+  border-radius: 14px !important;
+}
+
+.theme-option-b input,
+.theme-option-b select,
+.theme-option-b textarea {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 3px solid #111827 !important;
+  border-radius: 12px !important;
+}
+
+.theme-option-b .text-white { color: #111827 !important; }
+.theme-option-b .text-gray-300 { color: #374151 !important; }
+.theme-option-b .text-gray-400 { color: #4b5563 !important; }
+.theme-option-b .text-gray-500 { color: #6b7280 !important; }
+
+.theme-option-b .border-white\/20,
+.theme-option-b .border-white\/10 { border-color: #111827 !important; }
+.theme-option-b .bg-white\/10,
+.theme-option-b .bg-white\/20,
+.theme-option-b .bg-white\/5,
+.theme-option-b .bg-dark-800\/50,
+.theme-option-b .bg-dark-700\/50 { background: #ffffff !important; }
+
+.theme-option-b .rounded-3xl { border-radius: 20px !important; }
+
+/* Sticky header/footer separators */
+.theme-option-b header, .theme-option-b footer {
+  background: #ffffff !important;
+  border-bottom: 3px solid #111827 !important;
+}
+
+.theme-option-b .card {
+  background: #ffffff;
+  border: 3px solid #111827;
+  border-radius: 20px;
+  box-shadow: 6px 6px 0 #111827;
+}
+.theme-option-b .field {
+  background: #ffffff;
+  color: #0f172a;
+  border: 3px solid #111827;
+  border-radius: 12px;
+  padding: 14px;
+}
+.theme-option-b .btn {
+  border-radius: 12px;
+  padding: 12px 16px;
+  border: 3px solid #111827;
+}
+.theme-option-b .pill {
+  display: inline-flex;
+  border-radius: 9999px;
+  border: 3px solid #111827;
+  gap: 6px;
+  padding: 6px;
+  background: #ffffff;
+}
+.theme-option-b .pill button {
+  border-radius: 9999px;
+  padding: 10px 16px;
+  border: 3px solid transparent;
+  background: #fff;
+  color: #111827;
+  font-weight: 700;
+}
+.theme-option-b .pill button.active {
+  background: #111827;
+  color: #ffffff;
 }
