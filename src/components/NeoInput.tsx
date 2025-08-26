@@ -1,5 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useAppStore } from '../store/useAppStore'
+import { extractTextFromUrl } from '../utils/urlExtraction'
+import { extractTextFromPdf } from '../utils/pdfExtraction'
 
 export default function NeoInput() {
   const {
@@ -22,14 +24,12 @@ export default function NeoInput() {
     setIsLoading(true)
     setError(null)
     try {
-      // Simulated extraction
+      const text = await extractTextFromUrl(localUrl.trim())
       setUrl(localUrl.trim())
-      setTimeout(() => {
-        setExtractedContent(`Sample extracted content from: ${localUrl}`)
-        setIsLoading(false)
-      }, 1200)
+      setExtractedContent(text)
     } catch (e) {
-      setError('Failed to extract content from URL.')
+      setError(e instanceof Error ? e.message : 'Failed to extract content from URL.')
+    } finally {
       setIsLoading(false)
     }
   }, [localUrl, setUrl, setExtractedContent, setIsLoading, setError])
@@ -40,6 +40,7 @@ export default function NeoInput() {
     setSelectedFile(file)
     setIsLoading(true)
     setError(null)
+
     if (file.type === 'text/plain') {
       file.text().then(text => {
         setExtractedContent(text)
@@ -49,10 +50,10 @@ export default function NeoInput() {
         setIsLoading(false)
       })
     } else if (file.type === 'application/pdf') {
-      setTimeout(() => {
-        setExtractedContent(`Simulated text extracted from PDF: ${file.name}`)
-        setIsLoading(false)
-      }, 1200)
+      extractTextFromPdf(file)
+        .then(text => setExtractedContent(text))
+        .catch(() => setError('Failed to extract text from PDF'))
+        .finally(() => setIsLoading(false))
     } else {
       setIsLoading(false)
       setError('Unsupported file type')
