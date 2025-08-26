@@ -40,7 +40,7 @@ export default defineConfig(() => {
           globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
           runtimeCaching: [
             {
-              urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+              urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*$/i,
               handler: 'CacheFirst',
               options: {
                 cacheName: 'google-fonts-cache',
@@ -53,6 +53,12 @@ export default defineConfig(() => {
           ]
         }
       })
-    ]
+    ],
+    preview: {
+      host: true,
+      allowedHosts: [
+        'advisors-compare-forbidden-disaster.trycloudflare.com'
+      ]
+    }
   }
 })
