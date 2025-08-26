@@ -53,24 +53,24 @@
         </section>
 
         <section id="voices" class="card" style="margin-bottom:16px">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div style="font-weight:600">Voice</div><button class="btn">Test</button></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div style="font-weight:600;font-size:18px">Voice</div><button class="btn">Test</button></div>
           <div class="field" style="display:flex;align-items:center;height:44px">Choose a voice…</div>
         </section>
 
-        <section id="mode" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-          <button class="card" style="text-align:left"><div style="font-weight:600;margin-bottom:4px">Generate & Download</div><div class="muted">Create audio files for offline listening.</div></button>
-          <button class="card" style="text-align:left"><div style="font-weight:600;margin-bottom:4px">Read & Listen</div><div class="muted">Interactive reader with synced playback.</div></button>
+        <section id="mode" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0">
+          <button class="card" style="text-align:left"><div style="font-weight:600;margin-bottom:4px;font-size:18px">Generate & Download</div><div class="muted">Create audio files for offline listening.</div></button>
+          <button class="card" style="text-align:left"><div style="font-weight:600;margin-bottom:4px;font-size:18px">Read & Listen</div><div class="muted">Interactive reader with synced playback.</div></button>
         </section>
 
-        <section id="preview" class="card">
+        <section id="preview" class="card" style="margin-bottom:16px">
           <div style="display:flex;align-items:center;justify-content:space-between" class="muted"><div style="font-weight:600;color:#e5e7eb">Preview</div><div>~3 min • 600 words</div></div>
-          <div class="preview" style="margin-top:12px;max-height:220px;overflow:auto">“Typography is the craft of endowing human language with a durable visual form…”</div>
+          <div class="preview" style="margin-top:14px;max-height:240px;overflow:auto">“Typography is the craft of endowing human language with a durable visual form…”</div>
         </section>
 
         <div class="bar">
           <div class="card" style="display:flex;align-items:center;justify-content:space-between">
-            <div class="muted">Voice: Default • ~3 min</div>
-            <div style="display:flex;gap:10px"><a href="#top" class="btn">Top</a><button class="btn btn-primary">Start</button></div>
+            <div id="c-status" class="muted">Upload a file to enable Start</div>
+            <div style="display:flex;gap:10px"><button id="c-start" disabled class="btn btn-primary" style="opacity:.5;cursor:not-allowed">Start</button></div>
           </div>
         </div>
       </main>
@@ -92,6 +92,23 @@
       btnUrl.addEventListener('click',function(){mode='url';update()});
       btnFile.addEventListener('click',function(){mode='file';update()});
       update();
+
+      var fileInput=document.createElement('input');
+      fileInput.type='file';
+      // Lightweight gating: attach to file card click
+      fileCard.addEventListener('click',function(){
+        fileInput.click();
+      });
+      var start=document.getElementById('c-start');
+      var status=document.getElementById('c-status');
+      fileInput.addEventListener('change',function(){
+        if(fileInput.files && fileInput.files.length>0){
+          start.disabled=false;
+          start.style.opacity='1';
+          start.style.cursor='pointer';
+          status.textContent='File selected — you can Start now';
+        }
+      });
     })();
   </script>
 </html>

@@ -1,4 +1,4 @@
-import { ArrowUp, Play, Music } from 'lucide-react'
+import { Play, Music } from 'lucide-react'
 import { useAppStore } from '../store/useAppStore'
 
 export default function ActionBar({ onStart }: { onStart: () => void }) {
@@ -12,8 +12,8 @@ export default function ActionBar({ onStart }: { onStart: () => void }) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-40">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 safe-area-bottom">
-        <div className="glass-morphism-strong rounded-3xl border border-white/20 p-3 sm:p-4 soft-shadow">
-          <div className="flex flex-col md:flex-row md:items-center gap-3 sm:gap-4">
+        <div className="glass-morphism-strong rounded-3xl border border-white/20 p-4 soft-shadow">
+          <div className="flex flex-col md:flex-row md:items-center gap-4">
             <div className="flex-1 flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-400 to-primary-600 text-white flex items-center justify-center">
                 {processMode === 'generate' ? <Music className="w-5 h-5" /> : <Play className="w-5 h-5" />}
@@ -27,12 +27,8 @@ export default function ActionBar({ onStart }: { onStart: () => void }) {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 sm:gap-3">
-              <a href="#top" className="btn-ghost px-3 py-2 sm:px-4 sm:py-3 rounded-2xl hidden sm:inline-flex items-center gap-2">
-                <ArrowUp className="w-4 h-4" />
-                <span>Top</span>
-              </a>
-              <button onClick={onStart} className="btn-primary px-5 py-3 sm:px-6 sm:py-4 rounded-2xl font-bold">
+            <div className="flex items-center gap-3">
+              <button onClick={onStart} className="btn-primary px-6 py-4 rounded-2xl font-bold">
                 {processMode === 'generate' ? (ttsEngine === 'huggingface' ? 'Generate Audio (Kokoro-82M)' : 'Generate Audio') : 'Start Reading'}
               </button>
             </div>

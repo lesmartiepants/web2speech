@@ -56,7 +56,10 @@
         </div>
         <div id="b-file-card" class="card p-6">
           <div class="text-xl font-bold mb-3">File</div>
-          <div class="field h-28 grid place-items-center">Drag & drop or browse</div>
+          <label class="field h-28 grid place-items-center cursor-pointer">
+            <input id="b-file" type="file" class="hidden"/>
+            <span>Drag & drop or browse</span>
+          </label>
         </div>
       </section>
 
@@ -90,10 +93,9 @@
       <div class="sticky bottom-0 pt-6 bg-gradient-to-t from-white to-transparent">
         <div class="max-w-6xl mx-auto">
           <div class="card p-4 flex items-center justify-between">
-            <div>Voice: Default • ~3 min</div>
+            <div id="b-status">Upload a file to enable Start</div>
             <div class="flex gap-2">
-              <a href="#top" class="btn btn-ghost">Top</a>
-              <button class="btn btn-primary">Start</button>
+              <button id="b-start" disabled class="btn btn-primary opacity-50 cursor-not-allowed">Start</button>
             </div>
           </div>
         </div>
@@ -118,6 +120,17 @@
       btnUrl.addEventListener('click',function(){mode='url';update()});
       btnFile.addEventListener('click',function(){mode='file';update()});
       update();
+
+      var fileInput=document.getElementById('b-file');
+      var start=document.getElementById('b-start');
+      var status=document.getElementById('b-status');
+      fileInput.addEventListener('change',function(){
+        if(fileInput.files && fileInput.files.length>0){
+          start.disabled=false;
+          start.classList.remove('opacity-50','cursor-not-allowed');
+          status.textContent='File selected — you can Start now';
+        }
+      });
     })();
   </script>
 </html>

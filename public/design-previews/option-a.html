@@ -76,72 +76,6 @@
         </div>
       </section>
 
-      <!-- Stepper -->
-      <nav class="glass rounded-3xl p-4 overflow-x-auto snap-x snap-mandatory edge-fade">
-        <ol class="flex gap-3 min-w-max md:grid md:grid-cols-4 md:min-w-0">
-          <li class="snap-start min-w-[220px] md:min-w-0">
-            <a href="#input" class="block">
-              <div class="flex items-center gap-3 p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10">
-                <div class="w-10 h-10 rounded-xl bg-white/10 grid place-items-center">
-                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18"/><path d="M3 6h18"/><path d="M3 18h18"/></svg>
-                </div>
-                <div class="flex-1">
-                  <p class="text-sm font-semibold">Input</p>
-                  <div class="h-1 bg-white/10 rounded-full mt-1 overflow-hidden">
-                    <div class="h-full w-[30%] bg-white/20 rounded-full"></div>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li class="snap-start min-w-[220px] md:min-w-0">
-            <a href="#voices" class="block">
-              <div class="flex items-center gap-3 p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10">
-                <div class="w-10 h-10 rounded-xl bg-white/10 grid place-items-center">
-                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 22v-6"/><path d="M19 14v6"/><path d="M9 8v14"/><path d="M15 12v10"/></svg>
-                </div>
-                <div class="flex-1">
-                  <p class="text-sm font-semibold">Voice</p>
-                  <div class="h-1 bg-white/10 rounded-full mt-1 overflow-hidden">
-                    <div class="h-full w-[30%] bg-white/20 rounded-full"></div>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li class="snap-start min-w-[220px] md:min-w-0">
-            <a href="#mode" class="block">
-              <div class="flex items-center gap-3 p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10">
-                <div class="w-10 h-10 rounded-xl bg-white/10 grid place-items-center">
-                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m8 12 3 3 5-5"/><rect x="2" y="3" width="20" height="14" rx="2"/></svg>
-                </div>
-                <div class="flex-1">
-                  <p class="text-sm font-semibold">Mode</p>
-                  <div class="h-1 bg-white/10 rounded-full mt-1 overflow-hidden">
-                    <div class="h-full w-[30%] bg-white/20 rounded-full"></div>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li class="snap-start min-w-[220px] md:min-w-0">
-            <a href="#preview" class="block">
-              <div class="flex items-center gap-3 p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10">
-                <div class="w-10 h-10 rounded-xl bg-white/10 grid place-items-center">
-                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-                </div>
-                <div class="flex-1">
-                  <p class="text-sm font-semibold">Preview</p>
-                  <div class="h-1 bg-white/10 rounded-full mt-1 overflow-hidden">
-                    <div class="h-full w-[30%] bg-white/20 rounded-full"></div>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </li>
-        </ol>
-      </nav>
-
       <!-- URL/File toggle -->
       <div class="glass rounded-3xl p-4 border border-white/20 segmented flex items-center gap-2 w-full max-w-md mx-auto">
         <button id="btn-url" class="px-4 py-2 rounded-xl border border-white/10 text-sm font-semibold">URL</button>
@@ -161,9 +95,10 @@
         <div id="file-card" class="glass-strong rounded-3xl p-6 border border-white/20">
           <h3 class="text-white font-bold text-lg mb-2">File Upload</h3>
           <p class="text-gray-300 text-sm mb-4">Upload PDFs and text documents.</p>
-          <div class="border-2 border-dashed border-white/20 rounded-3xl p-10 text-center">
-            <p class="text-gray-300">Drag & drop or click to browse</p>
-          </div>
+          <label class="border-2 border-dashed border-white/20 rounded-3xl p-10 text-center block cursor-pointer">
+            <input id="optA-file" type="file" class="hidden"/>
+            <span class="text-gray-300">Drag & drop or click to browse</span>
+          </label>
         </div>
       </section>
 
@@ -203,12 +138,11 @@
         <div class="glass-strong rounded-3xl border border-white/20 p-3">
           <div class="flex flex-col md:flex-row md:items-center gap-3">
             <div class="flex-1">
-              <p class="text-white font-semibold">Start Reading Experience</p>
-              <p class="text-gray-300 text-sm">Voice: Default • ~3 min</p>
+              <p class="text-white font-semibold">Ready to start</p>
+              <p id="optA-status" class="text-gray-300 text-sm">Upload a file to enable Start</p>
             </div>
             <div class="flex items-center gap-2">
-              <a href="#top" class="glass px-4 py-3 rounded-2xl text-sm">Top</a>
-              <button class="btn-primary px-6 py-4 rounded-2xl font-bold">Start</button>
+              <button id="optA-start" disabled class="btn-primary px-6 py-4 rounded-2xl font-bold opacity-50 cursor-not-allowed">Start</button>
             </div>
           </div>
         </div>
@@ -231,6 +165,17 @@
         btnUrl.addEventListener('click', function(){ mode='url'; update(); });
         btnFile.addEventListener('click', function(){ mode='file'; update(); });
         update();
+
+        var fileInput = document.getElementById('optA-file');
+        var startBtn = document.getElementById('optA-start');
+        var status = document.getElementById('optA-status');
+        fileInput.addEventListener('change', function(){
+          if (fileInput.files && fileInput.files.length > 0) {
+            startBtn.disabled = false;
+            startBtn.classList.remove('opacity-50','cursor-not-allowed');
+            status.textContent = 'File selected — you can Start now';
+          }
+        });
       })();
     </script>
   </body>
