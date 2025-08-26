@@ -1,12 +1,13 @@
 import { useState } from 'react'
 
-type TabKey = 'live' | 'option-a' | 'option-b' | 'option-c'
+type TabKey = 'live' | 'option-a' | 'option-b' | 'option-c' | 'option-d'
 
 const TABS: { key: TabKey; label: string; href?: string }[] = [
   { key: 'live', label: 'Live App' },
   { key: 'option-a', label: 'Option A', href: '/design-previews/option-a.html' },
   { key: 'option-b', label: 'Option B', href: '/design-previews/option-b.html' },
   { key: 'option-c', label: 'Option C', href: '/design-previews/option-c.html' },
+  { key: 'option-d', label: 'Option D', href: '/design-previews/option-d.html' },
 ]
 
 export default function DesignTabs() {
