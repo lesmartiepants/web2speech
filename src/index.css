@@ -269,3 +269,42 @@
   background: #ffffff !important;
   border-bottom: 3px solid #111827 !important;
 }
+
+.theme-option-b .card {
+  background: #ffffff;
+  border: 3px solid #111827;
+  border-radius: 20px;
+  box-shadow: 6px 6px 0 #111827;
+}
+.theme-option-b .field {
+  background: #ffffff;
+  color: #0f172a;
+  border: 3px solid #111827;
+  border-radius: 12px;
+  padding: 14px;
+}
+.theme-option-b .btn {
+  border-radius: 12px;
+  padding: 12px 16px;
+  border: 3px solid #111827;
+}
+.theme-option-b .pill {
+  display: inline-flex;
+  border-radius: 9999px;
+  border: 3px solid #111827;
+  gap: 6px;
+  padding: 6px;
+  background: #ffffff;
+}
+.theme-option-b .pill button {
+  border-radius: 9999px;
+  padding: 10px 16px;
+  border: 3px solid transparent;
+  background: #fff;
+  color: #111827;
+  font-weight: 700;
+}
+.theme-option-b .pill button.active {
+  background: #111827;
+  color: #ffffff;
+}
